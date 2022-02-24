@@ -1,0 +1,40 @@
+// Stylesheet for the Screen component (Screen.js)
+
+// Imports
+@use "css/globalconf" as gc
+
+// Global vars
+$screenColor: #fff
+
+.screenContainer
+  borderRadius: gc.$borderRadius
+  justifyContent: center
+  alignContent: center
+  flexDirection: column
+
+.screenTitle
+  height: 20%
+  backgroundColor: $screenColor
+  padding: 20px
+  alignItems: center
+  justifyContent: center
+  borderRadius: gc.$smallRadius gc.$smallRadius 0px 0px
+  //borderColor: #f00
+  //borderWidth: 2px
+
+.screenContent
+  height: 80%
+  backgroundColor: $screenColor
+  padding: 20px
+  alignItems: center
+  justifyContent: flex-start
+  borderRadius: 0px 0px gc.$smallRadius gc.$smallRadius
+  flexDirection: column
+  //borderColor: #00f
+  //borderWidth: 2px
+
+.title
+  color: black
+  fontSize: 30
+  marginHorizontal: 15
+  marginBottom: 10
