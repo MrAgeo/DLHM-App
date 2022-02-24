@@ -1,26 +1,48 @@
+// App stylesheet
+
+@use "globalconf" as gc
+
 .container
   flex: 1
-  backgroundColor: #fff
-  alignItems: center
-  justifyContent: center
+  backgroundColor: gc.$borderColor
+  padding: gc.$borderMargin // Inner Space
+  margin: 20px // Outer space
+  //alignItems: center
+  justifyContent: space-evenly
+  borderRadius: gc.$borderRadius
+
+.grayText
+  color: #888
+  fontSize: 30
+  textAlign: center
+  marginBottom: 20
+
+.blackText
+  color: #000
+  fontSize: 20
+  textAlign: center
+  marginBottom: 20px
 
 .sheldon_img
   width: 256px
   height: 204px
-  marginTop: 30
-  marginBottom: 30
+  resizeMode: contain
 
-.helloTxt
-  color: #888
-  fontSize: 18
-  marginHorizontal: 15
-  // marginBottom: 10
+// Buttons' styles
+.btnContainer
+  width: 85%
+  flexDirection: row
+  alignItems: stretch
+  alignContent: space-around
+  justifyContent: space-between
+  padding: 20px
+  margin: 10px
 
 .btn
-  backgroundColor: blue
-  padding: 20px
-  borderRadius: 20px
+  backgroundColor: #4f95ff
+  padding: 10px
+  borderRadius: 5px
 
 .btnText
-  fontSize: 30
+  fontSize: 20
   color: #fff
