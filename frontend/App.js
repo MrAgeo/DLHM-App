@@ -95,7 +95,7 @@ export default function App() {
     return (
         <View style={styles.container}>
             <PagerView style={{flex: 1, justifyContent: "space-evenly"}} initialPage={0}
-                       pageMargin={2}>
+                       pageMargin={styles.container.paddingTop}>
                 <Screen title={"Hola Mundo!"} id="1">
                     <Text style={styles.grayText}>Swipe right!</Text>
                     <Image source={sheldon} style={styles.sheldon_img}/>
