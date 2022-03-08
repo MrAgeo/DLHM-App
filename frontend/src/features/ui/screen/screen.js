@@ -2,8 +2,8 @@
  * Screen Component
  */
 import {View, Text} from "react-native";
-import styles from './css/screen.sass'
-import {Separator} from "./Minicomponents";
+import styles from "./screen.sass"
+import {Separator} from "../mini-components";
 
 /**
  *
@@ -14,15 +14,18 @@ import {Separator} from "./Minicomponents";
 const Screen = (props) => {
     return (
         <View style={styles.screenContainer} key={props.id}>
-            <View style={styles.screenTitle}>
-                <Text style={styles.title}>{props.title}</Text>
-                <Separator/>
-            </View>
+            {/*<View style={styles.screenTitle}>*/}
+            {/*    <Text style={styles.title}>{props.title}</Text>*/}
+            {/*    <Separator/>*/}
+            {/*</View>*/}
             <View style={styles.screenContent}>
                 {props.children}
+            </View>
+            <View style={styles.screenBottom}>
+                {props.icon}
             </View>
         </View>
     );
 }
 
-export default Screen;
+export {Screen};

@@ -2,8 +2,9 @@
  * ItemList Component.
  */
 
-import {StyleSheet, FlatList, Text, View} from "react-native";
-import styles from './css/itemlist.sass'
+import {FlatList, Text, View} from "react-native";
+
+import styles from './item-list.sass'
 
 // Item definition
 const Item = ({title, index}) => (
@@ -28,4 +29,4 @@ const ItemList = (props) => {
     )
 }
 
-export default ItemList;
+export {ItemList};

@@ -2,12 +2,12 @@
  * Interface to the Flask Server
  */
 
-import {fetch2} from "./helpers";
+import {fetch2} from "../utils/helpers";
 
 /**
  * API to communicate to the Flask Server
  */
-class APIService {
+class FlaskServerApi {
     /**
      * Adds an item to the server list
      * @param name Name of the item
@@ -28,4 +28,4 @@ class APIService {
     }
 }
 
-export default APIService;
+export default FlaskServerApi;

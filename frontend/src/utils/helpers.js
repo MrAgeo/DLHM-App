@@ -25,5 +25,4 @@ const fetch2 = (route, options) => {
 const displayObject = (obj, logger=console.log) => {
     logger(JSON.stringify(obj))
 }
-
 export {fetch2, displayObject};

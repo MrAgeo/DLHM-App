@@ -1,0 +1,42 @@
+// Global Container Style
+
+@use "../../config/stylesheets/constants" as gc
+
+.container
+  flex: 1
+  flexDirection: column
+  backgroundColor: gc.$borderColor
+  //padding: gc.$borderMargin // Inner Space
+  //margin: 20px // Outer space
+  //alignItems: center
+  justifyContent: center
+  //borderRadius: gc.$borderRadius
+
+
+// Text Styles
+.grayText
+  color: #888
+  fontSize: 30
+  textAlign: center
+  marginBottom: 20
+
+.blackText
+  color: #000
+  fontSize: 20
+  textAlign: center
+  marginBottom: 20px
+
+
+// Buttons' styles
+.btnContainer
+  width: 20%
+  flex: 1
+  flexDirection: row
+  alignItems: center
+  alignContent: center
+  justifyContent: center
+  backgroundColor: transparent
+  //padding: 20px
+  //margin: 10px
+  //borderColor: #0f0
+  //borderWidth: 2px

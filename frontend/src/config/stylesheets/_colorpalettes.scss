@@ -1,0 +1,11 @@
+@use "sass:list";
+@use "sass:map";
+
+// Map with all the color palettes
+$colorPalettes: (
+        "bluePalette1":     #03045E #03478f #00B4D8 #90E0EF #CAF0F8,
+        "bluePalette2":     #00a2ff #00d0ff #00feff #80ffff #f5ffff,
+        "bluePalette3":     #140f07 #0f1e44 #184e9c #407efb #78b8fd,
+        "turquoisePalette": #0e3f5c #0e5268 #0c707e #0a9c97 #06d8ac,
+        "majof":            #080865 #f4f9e9 #7e8987 #000000
+);
