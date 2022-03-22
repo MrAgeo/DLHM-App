@@ -1,10 +1,9 @@
 /**
  * Library with some helper functions
  */
-import Constants from "expo-constants";
 
 // URL of the Flask Server
-const flaskURL = Constants.manifest.extra.flaskServerURL;
+const flaskURL = "http://192.168.1.3:5000";
 
 /**
  * Wrapper of 'fetch'

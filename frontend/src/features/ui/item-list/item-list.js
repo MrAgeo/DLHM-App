@@ -2,7 +2,8 @@
  * ItemList Component.
  */
 
-import {FlatList, Text, View} from "react-native";
+ import React from 'react';
+ import {FlatList, Text, View} from "react-native";
 
 import styles from './item-list.sass'
 

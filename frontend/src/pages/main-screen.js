@@ -3,6 +3,7 @@
  */
 
 // React Imports
+import React from 'react';
 import {Text, Image, TouchableOpacity} from "react-native";
 
 // Asset imports

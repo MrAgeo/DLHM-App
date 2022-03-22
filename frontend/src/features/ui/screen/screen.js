@@ -1,9 +1,10 @@
 /**
  * Screen Component
  */
+import React from 'react';
 import {View, Text} from "react-native";
 import styles from "./screen.sass"
-import {Separator} from "../mini-components";
+//import {Separator} from "../mini-components";
 
 /**
  *
