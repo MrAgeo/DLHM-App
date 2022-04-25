@@ -1,9 +1,8 @@
-"""Main file of the Flask Server."""
+"""Routes File"""
 
+from app import app
 import time
-from flask import Flask, jsonify, request
-
-app = Flask(__name__)
+from flask import jsonify, request, send_from_directory, abort
 
 # Items list
 _defaultList = [f'Item {x + 1}' for x in range(5)]
@@ -45,6 +44,9 @@ def reset():
     items = _defaultList[:]
     return f"{len(items)}"
 
-
-if __name__ == '__main__':
-    app.run()
+@app.route("/get-image/<image_name>")
+def get_image(image_name):
+    try:
+        return send_from_directory(app.config["CLIENT_IMAGES"], filename=image_name, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
