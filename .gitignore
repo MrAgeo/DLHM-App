@@ -1,4 +1,3 @@
-*/node_modules/
 */.expo/
 */dist/
 */npm-debug.*
@@ -9,9 +8,6 @@
 */*.mobileprovision
 */*.orig.*
 */web-build/
-
-# macOS
-*/.DS_Store
 
 # OSX
 #
@@ -39,9 +35,10 @@
 
 # Android/IntelliJ
 #
-*/build/
-*/.idea
-*/.gradle
+*/**/build/
+*/**/.idea
+*/**/.gradle
+*/**/gradle
 */local.properties
 */*.iml
 */*.hprof
@@ -78,3 +75,6 @@
 # CocoaPods
 */ios/Pods/
 /frontend/ios/
+/frontend/android.bat
+/frontend/rstart.bat
+/frontend/android/app/src/main/res_orig/
