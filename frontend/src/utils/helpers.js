@@ -2,8 +2,10 @@
  * Library with some helper functions
  */
 
+import React, { useMemo, useState } from "react";
+
 // URL of the Flask Server
-const flaskURL = "http://192.168.1.3:5000";
+const flaskURL = "http://192.168.1.1:5000";
 
 /**
  * Wrapper of 'fetch'
@@ -24,4 +26,87 @@ const fetch2 = (route, options) => {
 const displayObject = (obj, logger=console.log) => {
     logger(JSON.stringify(obj))
 }
-export {fetch2, displayObject};
+
+// React util functions
+/**
+ * Verifies if an object is a React Class Component.
+ * @param {*} component 
+ * @returns {boolean} `true` if the object is a React Class Component.
+ */
+function isClassComponent(component) {
+    return (
+        typeof component === 'function' && 
+        !!component.prototype.isReactComponent
+    )
+}
+
+/**
+ * Verifies if an object is a React Function Component.
+ * @param {*} component 
+ * @returns {boolean} `true` if the object is a React Function Component.
+ */
+function isFunctionComponent(component) {
+    return (
+        typeof component === 'function' && 
+        String(component).includes('return React.createElement')
+    )
+}
+
+/**
+ * Verifies if an object is a React Component.
+ * @param {*} component 
+ * @returns {boolean} `true` if the object is a React Component.
+ */
+function isReactComponent(component) {
+    return (
+        isClassComponent(component) || 
+        isFunctionComponent(component)
+    )
+}
+
+/**
+ * Verifies if an object is a React Element.
+ * @param {*} element 
+ * @returns {boolean} `true` if the object is a React Element.
+ */
+function isElement(element) {
+    return React.isValidElement(element);
+}
+
+/**
+ * Verifies if an object is a React DOM Element.
+ * @param {*} element 
+ * @returns {boolean} `true` if the object is a React DOM Element.
+ */
+function isDOMTypeElement(element) {
+    return isElement(element) && typeof element.type === 'string';
+}
+
+/**
+ * Verifies if an object is a React Composite Element.
+ * @param {*} element 
+ * @returns {boolean} `true` if the object is a React Composite Element.
+ */
+function isCompositeTypeElement(element) {
+    return isElement(element) && typeof element.type === 'function';
+}
+
+
+function useToggle(enabled = true) {
+    const [state, setState] = useState(enabled);
+
+    const handlers = useMemo(
+        () => ({
+            on: () => setState(true),
+            off: () => setState(false),
+            toggle: () => setState(!state),
+        }),
+    [],
+  );
+
+  return { enabled: state, ...handlers };
+}
+
+export { fetch2, displayObject,
+        isReactComponent, isFunctionComponent, isClassComponent,
+        isElement, isCompositeTypeElement, isDOMTypeElement, useToggle };

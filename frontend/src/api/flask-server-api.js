@@ -2,7 +2,7 @@
  * Interface to the Flask Server
  */
 
-import {fetch2} from "../utils/helpers";
+import { fetch2 } from "../utils/helpers";
 
 /**
  * API to communicate to the Flask Server

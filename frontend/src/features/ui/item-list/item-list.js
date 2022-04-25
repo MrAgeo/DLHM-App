@@ -3,7 +3,7 @@
  */
 
  import React from 'react';
- import {FlatList, Text, View} from "react-native";
+ import { FlatList, Text, View } from "react-native";
 
 import styles from './item-list.sass'
 
@@ -30,4 +30,4 @@ const ItemList = (props) => {
     )
 }
 
-export {ItemList};
+export { ItemList };

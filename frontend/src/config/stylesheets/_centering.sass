@@ -1,0 +1,23 @@
+@use 'sass:list'
+
+$_jcVals: flex-start, flex-end, center, space-between, space-around, space-evenly
+$_aiVals: stretch, flex-start, flex-end, center, baseline
+
+$_jcKurz: "fs", "fe", "c", "sb", "sa", "se"
+$_aiKurz: "s", "fs", "fe", "c", "b"
+
+.noMargin
+    margin: 0
+    margin-top: 0
+    margin-right: 0
+    margin-bottom: 0
+    margin-left: 0
+    margin-horizontal: 0
+    margin-vertical: 0 
+
+@each $jcKurz, $jcVal in list.zip($_jcKurz, $_jcVals)
+    @each $aiKurz, $aiVal in list.zip($_aiKurz, $_aiVals)
+        $identifier: ".j" + $jcKurz + "_a" + $aiKurz
+        #{$identifier}
+            align-items: $aiVal
+            justify-content: $jcVal

@@ -1,47 +1,48 @@
-import React, {Component, useEffect} from "react";
-import {View, Text} from "react-native";
-import {RNCamera} from "react-native-camera";
-import { displayObject } from "../../utils";
+import React, {Component, useEffect } from "react";
+import { View, Text } from "react-native";
+import { RNCamera } from "react-native-camera";
 
-import styles from "./camera.sass";
-
-const InfoView = (props) => (
-    <View
-        style={{
-            flex: 1,
-            backgroundColor: props.bgColor || "lightgreen",
-            justifyContent: 'center',
-            alignItems: 'center',
-        }}
-    >
-        <Text>{props.text}</Text>
-    </View>
-);
-
-// Max whiteBalance value
-const MAX_LENGTH = 5;
+import cam_styles from "./camera.sass";
+import styles from "../../config/stylesheets/styles.sass";
 
 class CameraFeature extends Component {
     state = {
-        hasPermission: null,
-        autoExposure: false,
-        exposureTime: 1/4000,
-        exposure: 0,
+        iso: 100,
+        autoIso: true,
+        autoExposure: true,
+        autoFocus: true,
+        exposureTime: 1/2500, // 0
+        exposureCompensation: 0,
         ratio: "4:3",
         pictureSize: "None",
-        zoom: 0,
-        whiteBalance: RNCamera.Constants.WhiteBalance.manual,
+        zoom: 0, // -1
+        whiteBalance: RNCamera.Constants.WhiteBalance.auto,
         whiteIdx: 0,
-        focusDepth: 0,
-        // ready: false,
+        focusDepth: 0, // -1
     }
 
-    setHasPermission(val) {
-        this.setState({hasPermission: val});
+
+    setDefaultValues() {
+        this.setExposureCompensation(100);
+        this.setAutoISO(true);
+        this.setAutoExposure(true);
+        this.setAutoFocus(true);
+        this.setExposureTime(1/2500);
+        this.setZoom(0);
+        this.setWhiteBalance(RNCamera.Constants.WhiteBalance.auto);
+        this.setFocusDepth(0);
     }
 
-    setExposure(val) {
-        this.setState({exposure: val});
+    setISO(val) {
+        this.setState({iso: val})
+    }
+
+    setAutoISO(val) {
+        this.setState({autoIso: val})
+    }
+
+    setExposureCompensation(val) {
+        this.setState({exposureCompensation: val});
     }
     
     setAutoExposure(val) {
@@ -80,40 +81,30 @@ class CameraFeature extends Component {
         this.setState({focusDepth: val});
     }
 
-    setReady(val) {
-        // this.setState({ready: val});
-        this.ready = val;
+    setAutoFocus(val) {
+        this.setState({autoFocus: val});
     }
 
     async onCameraReady() {
-        if (this.ready) {
-            const ratios = await this.cameraRef.getSupportedRatiosAsync().catch(err => console.log(err));
-            if (ratios) {
-                if (ratios.find(i => i === '1:1')) {
-                    this.setRatio('1:1');
-
-                } else {
-                    Alert.alert("Could not set 1:1 ratio")
-                }
+        const ratios = await this.cameraRef.getSupportedRatiosAsync().catch(err => console.log(err));
+        if (ratios) {
+            if (ratios.find(i => i === '1:1')) {
+                this.setRatio('1:1');
+            } else {
+                Alert.alert("Could not set 1:1 ratio")
             }
-            const pictureSizes = await this.cameraRef.getAvailablePictureSizesAsync(this.state.ratio)
-                .catch(err => console.log(err));
-            if (pictureSizes) {
-                this.setPictureSize(pictureSizes[0])
-                this.setReady(true);
-            }
+        }
+        
+        const pictureSizes = await this.cameraRef.getAvailablePictureSizes(this.state.ratio)
+            .catch(err => console.log(err));
+        if (pictureSizes) {
+            this.setPictureSize(pictureSizes[0])
         }
     }
 
-    // changeWhiteBalance() {
-    //     const idx = this.state.whiteIdx % whiteBalanceList.length;
-    //     this.setWhiteBalance(whiteBalanceList[idx]);
-    //     console.log(whiteBalanceListNames[idx]);
-    //     this.setWhiteIdx(this.state.whiteIdx + 1);
-    // }
-
     async takePic() {
         let photo = await this.cameraRef.takePictureAsync({
+            width: 1024,
             quality: 1, // 0 - 1
             orientation: "auto",
             base64: false,
@@ -124,58 +115,53 @@ class CameraFeature extends Component {
         return photo;
     }
 
-    // async pickImage() {
-    //     let result = await ImagePicker.launchImageLibraryAsync({
-    //         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //     });
-    //     return result;
-    // }
-
-    // async componentDidMount() {
-    //     RNCamera.requestCameraPermissionsAsync().then(res => this.setHasPermission(res === "authorized"));
-    // }
-
     constructor(props) {
         super(props);
+
+        const baseOverlayStyle = {flex: 1, width: "100%", flexDirection: "column", backgroundColor: "#0000"};
+        
         this.cameraRef = null;
-        this.ready = false;
+        this.overlayStyle = props.style === null ? baseOverlayStyle : [baseOverlayStyle, props.style];
     }
 
     render() {
-        // if (this.state.hasPermission == null) return <InfoView text={"Waiting..."}/>
-        // if (!this.state.hasPermission) return <InfoView text={"No access to camera"} bgColor={"firebrick"}/>
 
-        if (!this.props.isFocused) return <InfoView text={"Not focused"}/>
+        if (!this.props.isFocused) return <View style={{flex: 1, backgroundColor: "#000"}}/>
         return (
-                <RNCamera style={styles.preview}
-                        ref={ref => this.cameraRef = ref}
-
-                        exposure={this.state.exposure}
-                        exposureTime={this.state.exposureTime}
-                        zoom={this.state.zoom}
-                        focusDepth={this.state.focusDepth}
-                        ratio={this.state.ratio}
-                        pictureSize={this.state.pictureSize}
-                        whiteBalance={this.state.whiteBalance}
-                        
-                        
-                        autoFocus={RNCamera.Constants.AutoFocus.off}
-                        autoExposure={this.state.autoExposure}
-                        useCamera2Api={true}
-                        type={RNCamera.Constants.Type.back}
-                        flashMode={RNCamera.Constants.FlashMode.off}
-                        onCameraReady={this.onCameraReady}
-                        captureAudio={false}
-
-                        androidCameraPermissionOptions={{
-                            title: 'Permission to use camera',
-                            message: 'We need your permission to use your camera',
-                            buttonPositive: 'Ok',
-                            buttonNegative: 'Cancel',
-                          }}
-                />
+                <View style={[cam_styles.container, styles.jc_ac]}>
+                    <RNCamera style={cam_styles.preview}
+                            ref={ref => this.cameraRef = ref}
+    
+                            exposure={this.state.exposureCompensation}
+                            exposureTime={this.state.exposureTime}
+                            zoom={this.state.zoom}
+                            focusDepth={this.state.focusDepth}
+                            ratio={this.state.ratio}
+                            pictureSize={this.state.pictureSize}
+                            whiteBalance={this.state.whiteBalance}
+                            
+                            
+                            autoFocus={this.state.autoFocus}
+                            autoExposure={this.state.autoExposure}
+                            useCamera2Api={true}
+                            type={RNCamera.Constants.Type.back}
+                            flashMode={RNCamera.Constants.FlashMode.off}
+                            onCameraReady={() => {
+                                this.onCameraReady();
+                                // this.setAutoExposure(false);
+                                // this.setDefaultValues();
+                            }}
+                            captureAudio={false}>
+                        {(this.props.children === null ?
+                          null
+                          : <View style={this.overlayStyle}>
+                                {this.props.children}
+                            </View>
+                        )}
+                    </RNCamera>
+                </View>
         );
     }
 }
 
-export {CameraFeature};
+export { CameraFeature };

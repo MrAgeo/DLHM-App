@@ -5,44 +5,39 @@
 
 // Global vars
 $screenColor: #fff
-$screenContentPercentage: 93%
 
 .screenContainer
-  //borderRadius: gc.$borderRadius
-  justifyContent: center
-  alignContent: center
-  flexDirection: column
-  //borderWidth: 2px
-  //borderColor: #0f0
+  flex: 1
+  //border-radius: gc.$borderRadius
+  justify-content: center
+  align-content: center
+  flex-direction: column
+  // border: 2px solid #0f0
 
 .screenTitle
-  height: 20%
-  backgroundColor: $screenColor
-  paddingTop: 20px
-  alignItems: flex-start
-  justifyContent: flex-start
-  //borderRadius: gc.$smallRadius gc.$smallRadius 0px 0px
-  //borderColor: #f00
-  //borderWidth: 2px
+  flex-direction: row
+  background-color: $screenColor
+  align-items: flex-end // Vertical
+  justify-content: flex-start // Horizontal
+  //border-radius: gc.$smallRadius gc.$smallRadius 0px 0px
+  // border: 2px solid #f0f
 
 .screenContent
-  height: $screenContentPercentage
-  backgroundColor: $screenColor
-  alignItems: center
-  justifyContent: center
-  flexDirection: column
+  background-color: $screenColor
+  align-items: center
+  justify-content: center
+  flex-direction: column
 
 .screenBottom
-  height: 100% - $screenContentPercentage
-  background-color: #4f95ff
-  alignItems: center
-  justifyContent: center
-  //borderRadius: 0px 0px gc.$smallRadius gc.$smallRadius
-    borderColor: #f00
-    borderWidth: 2px
+  background-color: #ddd//#4f95ff
+  align-items: center
+  justify-content: center
+  //border-radius: 0px 0px gc.$smallRadius gc.$smallRadius
+  // border: 2px solid #f00
 
 .title
   color: black
-  fontSize: 30
-  marginHorizontal: 15
-  marginBottom: 10
+  font-size: 30
+  margin-horizontal: 15
+  margin-bottom: 10
+  // border: 2px solid #ff0

@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useRef, Component} from 'react';
-import {StyleSheet, Text, View, Button} from 'react-native';
-import {Camera} from 'expo-camera';
+import React, {useState, useEffect, useRef, Component } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import { Camera } from 'expo-camera';
 import * as ImagePicker from "expo-image-picker";
-import {displayObject} from "../utils";
+import { displayObject } from "../utils";
 
 const whiteBalanceList = Object.values(Camera.Constants.WhiteBalance);
 const whiteBalanceListNames = Object.keys(Camera.Constants.WhiteBalance);

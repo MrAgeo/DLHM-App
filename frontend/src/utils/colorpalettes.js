@@ -42,4 +42,4 @@ const reColorStyle = (style, id) => {
     return style
 }
 
-export {colorPalettes, paletteNames, usePalette, reColorStyle, getCurrentPaletteName}
+export { colorPalettes, paletteNames, usePalette, reColorStyle, getCurrentPaletteName}
