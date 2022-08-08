@@ -3,9 +3,8 @@ import { View } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
 import { RNCamera } from "react-native-camera";
 import { Svg, Circle } from "react-native-svg";
-import { Slider } from "@miblanchard/react-native-slider";
 
-import { ParamButtons } from "./camera-screen.components";
+import { ParamButtons, ParamSlider } from "./camera-screen.components";
 import { TouchableText } from "../features/ui/mini-components/mini-components";
 import { CameraFeature } from "../features/camera";
 import { Screen } from "../features/ui/screen";
@@ -25,21 +24,34 @@ const whiteBalanceList = Object.values(RNCamera.Constants.WhiteBalance);
 // JS TODOs
 // TODO: Re-render overlay when style changed
 // TODO: Fix Slider Update & Drawing
+// TODO: Add auto btn colors to camera-screen.sass instead of hardcoding
 const CameraScreen = ({ navigation }) => {
     // Navigation "isFocused"
     const isFocused = useIsFocused();
+    
+    // Camera ref
+    const camera = useRef(null);
 
+    // Take Picture Button
+    const [circleRadius, setCircleRadius] = useState("40%");
+    const [circleFill, setCircleFill] = useState("black");
+    
+    
     // Camera Props
     const [whiteIdx, setWhiteIdx] = useState(0);
+    const [zoom, setZoom] = useState(0);
+    const [iso, setISO] = useState(100);
+    const [focusDepth, setFocusDepth] = useState(0);
+    const [autoExposure, setAutoExposure] = useState(false);
+    const [exposureTime, setExposureTime] = useState(1/2500);
+    const [exposureCompensation, setExposureCompensation] = useState(0);
+
+    /*
 
     // Function related to auto-setting of the props
     const [autoFn, setAutoFn] = useState(null);
     const [isAuto, setIsAuto] = useState(true);
 
-
-    // Take Picture Button
-    const [circleRadius, setCircleRadius] = useState("40%");
-    const [circleFill, setCircleFill] = useState("black");
 
     // Slider Settings
     const [sliderVisible, setSliderVisible] = useState(false);
@@ -47,22 +59,21 @@ const CameraScreen = ({ navigation }) => {
     const [sliderMinimum, setSliderMinimum] = useState(0);
     const [sliderMaximum, setSliderMaximum] = useState(1);
     const [txtStyle, setTxtStyle] = useState([cam_styles.autoButtonText, {color: "#fff"}]);
-    const [bgStyle, setBgStyle] = useState ([cam_styles.autoButton, {backgroundColor: "#00c2ff"}]);
+    const [bgStyle, setBgStyle] = useState ([cam_styles.autoButton, cam_styles.autoButtonBgOn]);
 
     const [items, setItems] = useState(null);
 
-    const camera = useRef(null);
 
     // const setISO = val => camera.current.setISO(val);
-    const setAutoISO = val => camera.current.setAutoISO(val);
+    //const setAutoISO = val => camera.current.setAutoISO(val);
     const setZoom = val => camera.current.setZoom(val);
     const setExposureCompensation = val => camera.current.setExposureCompensation(val);
     const setAutoExposure = val => camera.current.setAutoExposure(val);
-    const setExposureTime = val => camera.current.setExposureTime(val);
+    const setExposureTime = val => { camera.current.setExposureTime(val); console.log("Hello")}
     const setFocusDepth = val => camera.current.setFocusDepth(val);
     const setAutoFocus = val => camera.current.setAutoFocus(val);
 
-    const changeISO = (selected) => {
+    const showISOSlider = (selected) => {
         alert("Todo ISO!")
         // setSliderVisible(selected);
         // if (!selected) return;
@@ -73,7 +84,7 @@ const CameraScreen = ({ navigation }) => {
         // setSliderFn(setISO)
     }
 
-    const changeZoom = (selected) => {
+    const showZoomSlider = (selected) => {
         setSliderVisible(selected);
         if (!selected) return;
 
@@ -83,7 +94,7 @@ const CameraScreen = ({ navigation }) => {
         setSliderFn(setZoom); // 0 - 1
     }
 
-    const changeExposureCompensation = (selected) => {
+    const showExposureCompensationSlider = (selected) => {
         setSliderVisible(selected);
         if (!selected) return;
 
@@ -93,7 +104,7 @@ const CameraScreen = ({ navigation }) => {
         setSliderFn(setExposureCompensation); // 0 - 1
     }
 
-    const changeExposureTime = (selected) => {
+    const showExposureTimeSlider = (selected) => {
         setSliderVisible(selected);
         if (!selected) return;
 
@@ -103,7 +114,7 @@ const CameraScreen = ({ navigation }) => {
         setSliderFn(setExposureTime);
     }
 
-    const changeFocusDepth = (selected) => {
+    const showFocusDepthSlider = (selected) => {
         setSliderVisible(selected);
         if (!selected) return;
 
@@ -113,8 +124,7 @@ const CameraScreen = ({ navigation }) => {
         setSliderFn(setFocusDepth);
     }
 
-
-    const changeWhiteBalance = () => {
+    const showWhiteBalanceSlider = () => {
         // setSliderVisible(selected);
         // if (!selected) return;
 
@@ -126,28 +136,11 @@ const CameraScreen = ({ navigation }) => {
         setWhiteIdx(whiteIdx + 1);
     }
 
-    const takePic = async () => {
-        const photo = await camera.current.takePic();
-        navigation.navigate("Image Preview", {photo: photo});
-
-    }
-
-    const toggle = () => {
-        setIsAuto(!isAuto);
-        const txtColor = isAuto ? "#fff" : "#000";
-        const bgColor = isAuto ? "#00c2ff" : "#fff";
-
-        setTxtStyle([cam_styles.autoButtonText, {color: txtColor}]);
-        setBgStyle([cam_styles.autoButton, {backgroundColor: bgColor}]);
-        autoFn(isAuto);
-    }
-
-
     useEffect(() => {
         const btnNames = ["ISO", "S", "EV", "WB", "F", "Z"];
-        const callbacks = [changeISO, changeExposureTime,
-                           changeExposureCompensation, changeWhiteBalance,
-                           changeFocusDepth, changeZoom];
+        const callbacks = [showISOSlider, showExposureTimeSlider,
+                           showExposureCompensationSlider, showWhiteBalanceSlider,
+                           showFocusDepthSlider, showZoomSlider];
 
         setItems(btnNames.map((txt, index) => {
             return({
@@ -158,6 +151,66 @@ const CameraScreen = ({ navigation }) => {
         }));
     }, []);
 
+    const toggle = () => {
+        setIsAuto(!isAuto);
+        const txtColor = isAuto ? "#fff" : "#000";
+        const bgColor = isAuto ? "#00c2ff" : "#fff";
+
+        setTxtStyle([cam_styles.autoButtonText, {color: txtColor}]);
+        setBgStyle([cam_styles.autoButton, {backgroundColor: bgColor}]);
+        if (autoFn !== null ) autoFn(isAuto);
+    }
+    */
+
+    const takePic = async () => {
+        const photo = await camera.current.takePic();
+        navigation.navigate("Image Preview", {photo: photo});
+
+    }
+
+    const onPress = () => takePic();
+    const onPressIn = () => {setCircleFill("white"); setCircleRadius("38%")};
+    const onPressOut = () => {setCircleFill("black"); setCircleRadius("40%")};
+
+    const changeISO = () => {
+        camera.current.setISO(iso)
+        setISO(100 + ((iso + 100) % 1000));
+    };
+
+    const changeZoom = () => {
+        camera.current.setZoom(zoom % 1.2);
+        setZoom(zoom + 0.2);
+    };
+
+    const changeAutoExposure = () => {
+        camera.current.setAutoExposure(autoExposure);
+        setAutoExposure(!autoExposure);
+    };
+
+    const changeExposureCompensation = () => {
+        camera.current.setExposureCompensation(exposureCompensation % 10);
+        setExposureCompensation(exposureCompensation + 1);
+    };
+
+    const changeExposureTime = () => {
+        camera.current.setExposureTime(exposureTime);
+        const newET = exposureTime*1.25;
+        setExposureTime(newET < 0.25 ? newET : 1/2500);
+    };
+
+    const changeFocusDepth = () => {
+        camera.current.setFocusDepth(focusDepth % 1.2);
+        setFocusDepth(focusDepth + 0.2);
+    };
+
+    const changeWhiteBalance = () => {
+        const idx = whiteIdx % whiteBalanceList.length;
+        camera.current.setWhiteBalance(whiteBalanceList[idx]);
+        //console.log(whiteBalanceListNames[idx]);
+        setWhiteIdx(whiteIdx + 1);
+    };
+
+
     return (
         <Screen titleHeight={5}
                 titleContainerStyle={blackBg}
@@ -166,46 +219,28 @@ const CameraScreen = ({ navigation }) => {
             <View style={cam_styles.cameraContainer}>
                 <CameraFeature style={styles.jfe_afe}
                                ref={camera} isFocused={isFocused}>
-                    <View style={cam_styles.sliderContainer}>
-                        {(sliderVisible?
-                            <View style={cam_styles.autoButtonContainer}>
-                                <TouchableText text="A"
-                                            style={bgStyle}
-                                            textStyle={txtStyle}/>
-                            </View>
-                            : null )}
-                        {(sliderVisible ?
-                            <Slider containerStyle={cam_styles.slider}
-                                    maximumTrackTintColor={"#fff"}
-                                    minimumTrackTintColor={"#"}
-                                    trackStyle={{height:1}}
-                                    thumbTouchSize={{width:20, height:20}}
-                                    minimumValue={sliderMinimum}
-                                    maximumValue={sliderMaximum}
-                                    onValueChange={val => sliderFn(val[0])}
-                                    onSlidingStart={() => {if(isAuto) toggle();}}
-                                    />
-                            : null
-                        )}
-                    </View>
-                    <View style={cam_styles.paramContainer}>
-                        {/* <TouchableText text="ISO" onPress={changeISO} />
+                    {/* <ParamSlider visible={sliderVisible} sliderFn={sliderFn}
+                        sliderMinimum={sliderMinimum} sliderMaximum={sliderMaximum}
+                        txtStyle={txtStyle} bgStyle={bgStyle}
+                        isAuto={isAuto} toggle={toggle} /> */}
+                    <View style={[cam_styles.paramContainer,{flexDirection:"row"}]}>
+                        <TouchableText text="ISO" onPress={changeISO} />
                         <TouchableText text="AS" onPress={changeAutoExposure} />
                         <TouchableText text="S" onPress={changeExposureTime} />
                         <TouchableText text="EV" onPress={changeExposureCompensation} />
                         <TouchableText text="WB" onPress={changeWhiteBalance} />
                         <TouchableText text="F" onPress={changeFocusDepth} />
-                        <TouchableText text="Z" onPress={changeZoom} /> */}
-                        <ParamButtons items={items} />
+                        <TouchableText text="Z" onPress={changeZoom} />
+                        {/* <ParamButtons items={items} /> */}
                     </View>
                 </CameraFeature>
             </View>
             <View style={cam_styles.buttonContainer}>
                 <View style={[cam_styles.snapButton]}>
                     <Svg width="100%" height="100%"
-                        onPress={() => takePic()}
-                        onPressIn={() => {setCircleFill("white"); setCircleRadius("38%")}}
-                        onPressOut={() => {setCircleFill("black"); setCircleRadius("40%")}}>
+                        onPress={onPress}
+                        onPressIn={onPressIn}
+                        onPressOut={onPressOut}>
                             <Circle
                                 cx="50%"
                                 cy="50%"

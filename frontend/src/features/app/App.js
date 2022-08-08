@@ -28,7 +28,7 @@ export function App() {
                 {title: "About external storage",
                  message: "In order to read and write the holograms and their references," +
                          " we need to access the external storage of your device.",
-                 buttonPositive: "Ok"});
+                 buttonPositive: "Ok" });
                  setReadOk(readRes === granted);
                  setWriteOk(await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE));
         }
@@ -56,12 +56,13 @@ export function App() {
             </NavigationContainer>
         );
     }
+
+    const onPress = () => requestReadWritePermissions().catch(err => console.log(err));
+
     return (
         <View style={[styles.jc_ac, {flex: 1, flexDirection: 'column'}]}>
             <Text style={styles.grayTextBig}>Waiting for permissions...</Text>
             <Button title="Request Permissions"
-                onPress={() => requestReadWritePermissions().catch(err => console.log(err))} />
+                onPress={onPress} />
         </View>);
-
-    
 }

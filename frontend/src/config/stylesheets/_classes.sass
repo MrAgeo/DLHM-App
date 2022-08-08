@@ -1,14 +1,36 @@
-@mixin blackText
+@use 'sass:list'
+
+%baseTextMargins
+  margin-horizontal: 15
+  margin-bottom: 10
+
+$btnColor: #00c2ff
+
+@mixin blackText($withMargins: true)
+  @if $withMargins
+    @extend %baseTextMargins
   color: #000
-  margin-horizontal: 15
-  margin-bottom: 10
 
-@mixin grayText
+@mixin grayText($withMargins: true)
+  @if $withMargins
+    @extend %baseTextMargins
   color: #888
-  margin-horizontal: 15
-  margin-bottom: 10
 
-@mixin whiteText
+@mixin whiteText($withMargins: true)
+  @if $withMargins
+    @extend %baseTextMargins
   color: #fff
-  margin-horizontal: 15
-  margin-bottom: 10
+
+
+
+@mixin btnClear($width: 100%, $height: 100%, $marginV: 0, $marginH: 0)
+  flex-direction: column
+  align-items: center
+  align-content: center
+  justify-content: center
+  background-color: $btnColor
+  border-radius: 5px
+  width: $width
+  height: $height
+  @if not ($marginV == 0 and $marginH == 0)
+    margin: $marginV $marginH $marginV $marginH

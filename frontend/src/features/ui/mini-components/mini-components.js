@@ -20,7 +20,7 @@ const InfoView = (props) => (
 const baseBtnStyle = {backgroundColor: "#0000", alignItems: "center", justifyContent: "center"};
 const baseTxtStyle = {color: "#fff", fontSize: 27, marginHorizontal: "2%"};
 
-const TouchableText = ({ text, children, onPress, style, textStyle}) => {
+const TouchableText = ({ text, children, onPress, style, textStyle }) => {
     const btnStyle = style === null? baseBtnStyle : [baseBtnStyle, style];
     const txtStyle = textStyle === null? baseTxtStyle : [baseTxtStyle, textStyle];
     return (

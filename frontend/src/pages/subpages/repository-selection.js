@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text } from "react-native";
 import { Dirs, FileSystem } from 'react-native-file-access';
-import { RNFileSystem, RNCamera } from "react-native-camera";
 
-import { Screen } from "../../features/ui/screen";
 import styles from "../../config/stylesheets/styles.sass";
-import { ImageSelector } from "../../features/ui/image-selector/image-selector";
-import { displayObject } from "../../utils";
+
 import { appPaths } from "../../features/app";
+import { Screen } from "../../features/ui/screen";
+import { ImageSelector } from "../../features/ui/image-selector/image-selector";
+import { RepositoryContext } from "../contexts";
+import { createImg } from "../../utils";
+import { useIsFocused } from "@react-navigation/native";
 
 const titleContainerStyle = styles.jc_afe;
 const titleStyle = [styles.blackTextSmall, {marginBottom: 0}];
@@ -15,62 +17,52 @@ const titleHeight = 7;
 
 const watermark = [styles.grayTextBig, {textAlign: "center"}];
 
+
 const getItems = async (path) => {
     const res = await FileSystem.ls(path).catch(err => console.log(err));
-    return res.map((subentry, index) => ({uri: `file://${path}/${subentry}`, id: index}));
+    return res.map((subentry, index) => {
+        const itemPath = `${path}/${subentry}`;
+        return Object.assign({path: itemPath, id: index}, createImg(itemPath));
+    });
 }
 
-const HoloScreen = () => {
-    const [holos, setHolos] = useState(null);
+const RepoGallery = (props) => {
+    const [items, setItems] = useState(null);
+    const bgColor = {backgroundColor: props.bgColor || "inherit"};
 
-    useEffect(() => {
-                    (async() => {
-                        setHolos(await getItems(appPaths.holoPath));
-                    })();
-                }, []);
-    return (
-        <Screen title={"Holograms"}
-                titleStyle={titleStyle}
-                titleHeight={titleHeight}
-                titleContainerStyle={titleContainerStyle}>
-            <View style={[styles.jc_ac, {backgroundColor: "#eee", height: "100%", width: "100%"}]}>
-                {(holos === null || holos.length === 0 ?
-                    <Text style={watermark}>No Holograms</Text>
-                    : <ImageSelector items={holos}/>
-                )}
-            </View>
-        </Screen>);
-}
+    const isFocused = useIsFocused();
 
-const RefScreen = () => {
-    const [refs, setRefs] = useState(null);
-    
-    
     useEffect(() => {
         (async() => {
-            setRefs(await getItems(appPaths.refPath));
+            setItems(await getItems(props.path));
         })();
     }, []);
 
+    if (!isFocused) return <View style={{flex: 1}}></View>;
     return (
-        <Screen title={"References"}
+        <Screen title={props.title}
                 titleStyle={titleStyle}
                 titleHeight={titleHeight}
-                titleContainerStyle={titleContainerStyle}>
-            {(refs === null || refs.length === 0 ?
-                    <Text style={watermark}>No References</Text>
-                    :<ImageSelector items={refs}/>
+                titleContainerStyle={titleContainerStyle}
+                contentContainerStyle={bgColor}>
+            {(items === null || items.length === 0 ?
+                    <Text style={watermark}>{`No ${props.title}`}</Text>
+                    : <ImageSelector items={items} setSelection={props.selectionFn}/>
                 )}
         </Screen>);
 }
-const RepositorySelectionScreen = () => {
-    //displayObject(RNCamera.fs);
+
+const RepositorySelectionScreen = ( { isFocused } ) => {
+    const { setSelectedHolo, setSelectedRef } = useContext(RepositoryContext);
+    
+    if (!isFocused) return <View style={{flex: 1}}></View>;
     return (
-    <View style={{flex: 1, flexDirection: "row", alignItems: "flex-start"}}>
-        <HoloScreen />
-        <RefScreen />
-    </View>);
+        <View style={{flex: 1, flexDirection: "row", alignItems: "flex-start"}}>
+            <RepoGallery title={"Holograms"} bgColor={"#eee"}
+                         path={appPaths.holoPath} selectionFn={setSelectedHolo}/>
+            <RepoGallery title={"References"}
+                         path={appPaths.refPath} selectionFn={setSelectedRef}/>
+        </View>);
 }
 
-
-export { RepositorySelectionScreen };
+export { RepositorySelectionScreen, RepositoryContext };

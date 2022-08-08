@@ -1,19 +1,67 @@
-.container // FlatList
-  flex: 1
+// Common styles
 
-.item // TouchableOpacity
+@use "../../config/stylesheets/constants" as gc
+@use "../../config/stylesheets/classes" as gcl
+@use 'sass:color'
+
+%baseItem // Base TouchableOpacity / View style
   flex-direction: row
-  width: 100%
   align-items: center
   justify-content: flex-start
   background-color: inherit
-  // border: 2px solid #f00
   border-bottom-width: 1px
-  // border-top-width: 0.5px
-  border-color: #ccc
+  border-bottom-color: #ccc
 
 
-$verticalMargin: 3%
+.item
+  @extend %baseItem
+  height: 55px
+
+$verticalMargin: 10px
 .text
+  @include gcl.blackText
+  font-size: gc.$fontSmall
   margin-top: $verticalMargin
   margin-bottom: $verticalMargin
+
+// Common Styles
+.configScreen
+  flex: 1
+  flex-direction: column
+  background-color: #ddd
+  justify-content: flex-start
+  align-items: stretch
+
+.title
+  @include gcl.blackText
+  font-size: gc.$fontMed
+  font-weight: bold
+  //font-style: italic,
+  padding-bottom: 2%
+  border-color: #000
+  border-bottom-width: 2px
+  text-align: center
+
+.titleContainer
+  @extend %baseItem
+  height: 100px
+  justify-content: center
+  padding-top: 5%
+  padding-bottom: 7%
+  // border: 2px solid blue
+
+.btnClear
+  @include gcl.btnClear(60%, 50%, 0, 0)
+  background-color: scale-color(gcl.$btnColor, $blackness: 15% )
+
+// Hologram Reconstruction Config Screen
+.holoItem
+    @extend %baseItem
+    flex: 1
+    flex-direction: column
+    padding-bottom: 20px
+
+.holoTextInput
+  @include gcl.blackText(false) // No margins
+  font-size: gc.$fontSmall
+  background-color:#fff

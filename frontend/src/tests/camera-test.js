@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef, Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { Alert, StyleSheet, Text, View, Button } from 'react-native';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from "expo-image-picker";
 import { displayObject } from "../utils";
@@ -95,6 +95,18 @@ function CameraTestFn() {
 
     if (hasPermission === null) return <View/>;
     if (hasPermission === false) return <Text>No access to camera</Text>;
+
+    const onPressFlip = () => {
+        //setReady(false);
+        setCameraType(
+            type === Camera.Constants.Type.back
+                ? Camera.Constants.Type.front
+                : Camera.Constants.Type.back
+        );
+    };
+    const onPressTakePic = () => takePic();
+    const onPressPickImg = () => pickImage();
+
     return (
         <View style={styles.container}>
                 <View style={styles.titleContainer}><Text style={{fontSize:20}}>Function Component</Text></View>
@@ -112,20 +124,13 @@ function CameraTestFn() {
                     zoom={zoom}/>
             <View style={styles.buttonContainer}>
                 <Button title={"Flip"}
-                        onPress={() => {
-                            //setReady(false);
-                            setCameraType(
-                                type === Camera.Constants.Type.back
-                                    ? Camera.Constants.Type.front
-                                    : Camera.Constants.Type.back
-                            );
-                        }}
+                        onPress={onPressFlip}
                 />
-                <Button title={"Take a picture"} onPress={() => takePic()}/>
+                <Button title={"Take a picture"} onPress={onPressTakePic}/>
                 <Button title={"Zoom"} onPress={changeZoom}/>
                 <Button title={"Focus"} onPress={changeFocusDepth}/>
                 <Button title={"WB"} onPress={changeWhiteBalance}/>
-                <Button title={"PickImage"} onPress={() => pickImage()}/>
+                <Button title={"PickImage"} onPress={onPressPickImg}/>
             </View>
         </View>
     );
