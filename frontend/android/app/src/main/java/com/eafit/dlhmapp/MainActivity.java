@@ -1,6 +1,5 @@
 package com.eafit.dlhmapp;
 
-import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 
 public class MainActivity extends ReactActivity {
@@ -12,10 +11,5 @@ public class MainActivity extends ReactActivity {
   @Override
   protected String getMainComponentName() {
     return "DLHM-App";
-  }
-  
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(null);
   }
 }
