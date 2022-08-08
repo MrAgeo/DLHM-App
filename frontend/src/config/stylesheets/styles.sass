@@ -1,8 +1,12 @@
 // Global Styles
 
+// Modules
 @use "./constants" as gc
 @use "./classes" as gcl
+
+// Styles
 @import "./centering"
+@import "./text"
 
 
 // Global Container Style
@@ -17,52 +21,18 @@
   //border-radius: gc.$borderRadius
 
 
-// Text Styles
-.grayTextBig
-  @include gcl.grayText
-  font-size: gc.$fontBig
-
-.grayTextMed
-  @include gcl.grayText
-  font-size: gc.$fontMed
-
-.grayTextSmall
-  @include gcl.grayText
-  font-size: gc.$fontSmall
-
-.blackTextBig
-  @include gcl.blackText
-  font-size: gc.$fontBig
-
-.blackTextMed
-  @include gcl.blackText
-  font-size: gc.$fontMed
-
-.blackTextSmall
-  @include gcl.blackText
-  font-size: gc.$fontSmall
-
-.whiteTextBig
-  @include gcl.whiteText
-  font-size: gc.$fontBig
-
-.whiteTextMed
-  @include gcl.whiteText
-  font-size: gc.$fontMed
-
-.whiteTextSmall
-  @include gcl.whiteText
-  font-size: gc.$fontSmall
-
 // Buttons' styles
 .btnContainer
-  width: 15%
+  width: 20%
   flex: 1
-  flex-direction: row
+  flex-direction: column
   align-items: center
   align-content: center
   justify-content: center
   background-color: transparent
   //padding: 20px
   //margin: 10px
-  // border: 2px solid #f00
+  //border: 2px solid #f00
+
+.btnClear
+  @include gcl.btnClear(40%, 50%, 20px, 10px)

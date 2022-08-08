@@ -8,7 +8,7 @@
 import styles from './item-list.sass'
 
 // Item definition
-const Item = ({title, index}) => (
+const Item = ({ title, index }) => (
     <View style={styles.item}>
         <Text style={styles.itemTitle}>{index}. {title}</Text>
     </View>
@@ -23,7 +23,7 @@ const Item = ({title, index}) => (
 const ItemList = (props) => {
 
     // There will be a list of these Components
-    const renderItem = ({item, index}) => <Item title={item} index={index + 1}></Item>
+    const renderItem = ({ item, index }) => <Item title={item} index={index + 1}></Item>
     return (
         <FlatList style={props.style} data={props.items} renderItem={renderItem}
                   keyExtractor={(item, index) => item + index}/>

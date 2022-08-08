@@ -1,4 +1,8 @@
 $buttonContainerHeight: 15
+
+@use "../../config/stylesheets/classes" as gcl
+
+
 .cameraContainer
     flex: 100 - $buttonContainerHeight
     width: 100%
@@ -61,7 +65,10 @@ $buttonContainerHeight: 15
 
 .autoButtonText
     font-size: 20
-    
+
+.autoButtonBgOn
+    background-color: gcl.$btnColor
+
 
 .flatList
     width: 100%

@@ -6,6 +6,7 @@ $_aiVals: stretch, flex-start, flex-end, center, baseline
 $_jcKurz: "fs", "fe", "c", "sb", "sa", "se"
 $_aiKurz: "s", "fs", "fe", "c", "b"
 
+
 .noMargin
     margin: 0
     margin-top: 0
@@ -13,7 +14,7 @@ $_aiKurz: "s", "fs", "fe", "c", "b"
     margin-bottom: 0
     margin-left: 0
     margin-horizontal: 0
-    margin-vertical: 0 
+    margin-vertical: 0
 
 @each $jcKurz, $jcVal in list.zip($_jcKurz, $_jcVals)
     @each $aiKurz, $aiVal in list.zip($_aiKurz, $_aiVals)

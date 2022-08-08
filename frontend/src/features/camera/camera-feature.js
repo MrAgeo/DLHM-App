@@ -1,5 +1,5 @@
-import React, {Component, useEffect } from "react";
-import { View, Text } from "react-native";
+import React, { Component, useEffect } from "react";
+import { View, Text, Alert } from "react-native";
 import { RNCamera } from "react-native-camera";
 
 import cam_styles from "./camera.sass";
@@ -85,21 +85,25 @@ class CameraFeature extends Component {
         this.setState({autoFocus: val});
     }
 
+
+    
     async onCameraReady() {
-        const ratios = await this.cameraRef.getSupportedRatiosAsync().catch(err => console.log(err));
-        if (ratios) {
-            if (ratios.find(i => i === '1:1')) {
-                this.setRatio('1:1');
-            } else {
-                Alert.alert("Could not set 1:1 ratio")
+            const ratios = await this.cameraRef.getSupportedRatiosAsync().catch(err => console.log(err));
+            if (ratios) {
+                if (ratios.find(i => i === '1:1')) {
+                    this.setRatio('1:1');
+                } else {
+                    Alert.alert("Could not set 1:1 ratio")
+                }
             }
-        }
-        
-        const pictureSizes = await this.cameraRef.getAvailablePictureSizes(this.state.ratio)
-            .catch(err => console.log(err));
-        if (pictureSizes) {
-            this.setPictureSize(pictureSizes[0])
-        }
+            
+            const pictureSizes = await this.cameraRef.getAvailablePictureSizes(this.state.ratio)
+                .catch(err => console.log(err));
+            if (pictureSizes) {
+                this.setPictureSize(pictureSizes[0])
+            }
+        // this.setAutoExposure(false);
+        // this.setDefaultValues();
     }
 
     async takePic() {
@@ -139,6 +143,7 @@ class CameraFeature extends Component {
                             ratio={this.state.ratio}
                             pictureSize={this.state.pictureSize}
                             whiteBalance={this.state.whiteBalance}
+                            iso={this.state.iso}
                             
                             
                             autoFocus={this.state.autoFocus}
@@ -146,11 +151,7 @@ class CameraFeature extends Component {
                             useCamera2Api={true}
                             type={RNCamera.Constants.Type.back}
                             flashMode={RNCamera.Constants.FlashMode.off}
-                            onCameraReady={() => {
-                                this.onCameraReady();
-                                // this.setAutoExposure(false);
-                                // this.setDefaultValues();
-                            }}
+                            onCameraReady={() => this.onCameraReady()}
                             captureAudio={false}>
                         {(this.props.children === null ?
                           null
