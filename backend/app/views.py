@@ -79,7 +79,6 @@ def create_reconstruction():
 
 @app.route("/dlhm/get-reconstruction", methods=["GET"])
 def get_reconstruction():
-    print(f"{app.config['REC_PATH']}/{app.config['REC_FILENAME']}")
     try:
         return send_from_directory(app.config["REC_PATH"], app.config["REC_FILENAME"], as_attachment=False)
     except FileNotFoundError:
