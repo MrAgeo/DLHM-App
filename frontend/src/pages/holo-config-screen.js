@@ -86,7 +86,6 @@ const HoloConfigScreen = ({ navigation, route }) => {
             params[item.text] = item.value;
         }
 
-        console.log(params);
         if (holoType === null) {
             Alert.alert("Error", "You must select a hologram type");
         } else if (msg === null) {
