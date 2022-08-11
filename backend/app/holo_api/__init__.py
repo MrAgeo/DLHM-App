@@ -73,8 +73,8 @@ def reconstruct(holo_filepath, ref_filepath=None, options=None, outpath=None):
         z = focusnet.predict(holo - ref) * 1E-2
         uz = as_reconstruct(holo, ref, pixel_pitch, wavelength, z)
     elif method == "HNet":
-        z = holonet.predict(holo - ref) * 1E-2
-        uz = as_reconstruct(holo, ref, pixel_pitch, wavelength, z)
+        uz = holonet.predict((holo - ref)/255).reshape((min_val, min_val))
+        # uz = as_reconstruct(holo, ref, pixel_pitch, wavelength, z)
     else:
         return False, "Invalid Reconstruction Algorithm!"
 
