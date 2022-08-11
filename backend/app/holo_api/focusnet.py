@@ -2,7 +2,7 @@ from tensorflow import keras
 from .helpers import Rotate90Randomly, Fourier2D
 import numpy as np
 
-__all__ = ("get_model", "predict")
+__all__ = ("load_model", "get_model", "predict")
 
 
 _model = None

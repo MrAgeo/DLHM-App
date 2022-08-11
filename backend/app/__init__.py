@@ -39,7 +39,8 @@ app.config.update(app_config)
 # Check if paths exist. If not, create them.
 _create_dirs()
 
-from .holo_api import focusnet
-
+from .holo_api import focusnet, holonet
 focusnet.load_model(app.config["FOCUSNET_FILEPATH"])
+holonet.load_model(app.config["HOLONET_FILEPATH"])
+
 from app import views

@@ -32,5 +32,5 @@ app_config["FOCUSNET_FILEPATH"] = f'{app_config["FOCUSNET_PATH"]}/{app_config["F
 app_config["HOLONET_FILENAME"] = "HoloNet_model.h5"
 app_config["HOLONET_FILEPATH"] = f'{app_config["HOLONET_PATH"]}/{app_config["HOLONET_FILENAME"]}'
 
-app_config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "GIF", "TIFF", "TIF"]
+app_config["ALLOWED_IMAGE_EXTENSIONS"] = ["JPEG", "JPG", "PNG", "TIFF", "TIF", "BMP"]
 app_config['MAX_IMAGE_FILESIZE'] = 10 * 1024 * 1024  # 10 MB (size in bytes)
