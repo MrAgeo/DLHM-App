@@ -8,6 +8,7 @@
 */*.mobileprovision
 */*.orig.*
 */web-build/
+/*/**/__pycache__
 
 # OSX
 #
@@ -35,6 +36,7 @@
 
 # Android/IntelliJ
 #
+/.idea/
 */**/build/
 */**/.idea
 */**/.gradle
