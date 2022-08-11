@@ -26,10 +26,11 @@ class FlaskServerApi {
               method: "POST",
               body: createDLHMImageFormData(holoPath, refPath)
           })
-          .then( res => res.json())
+          .then(res => res.json())
           .catch(err => {
             console.log("upload error", err);
-            Alert.alert("Error", "Upload failed! See console for details.");
+            Alert.alert("Error", "Upload failed! Please try again.");
+            return null;
           });
     }
 

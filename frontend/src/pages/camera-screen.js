@@ -18,31 +18,29 @@ const whiteBalanceList = Object.values(RNCamera.Constants.WhiteBalance);
 
 // Java TODOs
 // TODO: Add getExposureTimeRange / getExposureCompensationRange
-// TODO: Add ISO prop (mISO, setISO, updateISO, getISO)
-// TODO: Update ExposureTime when AE change & when is set to false (true->false & init ae prop = false)
 
 // JS TODOs
-// TODO: Re-render overlay when style changed
+// TODO: Re-render button overlay when style changed
 // TODO: Fix Slider Update & Drawing
 // TODO: Add auto btn colors to camera-screen.sass instead of hardcoding
 const CameraScreen = ({ navigation }) => {
     // Navigation "isFocused"
     const isFocused = useIsFocused();
-    
+
     // Camera ref
     const camera = useRef(null);
 
     // Take Picture Button
     const [circleRadius, setCircleRadius] = useState("40%");
     const [circleFill, setCircleFill] = useState("black");
-    
-    
+
+
     // Camera Props
     const [whiteIdx, setWhiteIdx] = useState(0);
     const [zoom, setZoom] = useState(0);
     const [iso, setISO] = useState(100);
     const [focusDepth, setFocusDepth] = useState(0);
-    const [autoExposure, setAutoExposure] = useState(false);
+    const [autoExposure, setAutoExposure] = useState(true);
     const [exposureTime, setExposureTime] = useState(1/2500);
     const [exposureCompensation, setExposureCompensation] = useState(0);
 
@@ -173,7 +171,7 @@ const CameraScreen = ({ navigation }) => {
     const onPressOut = () => {setCircleFill("black"); setCircleRadius("40%")};
 
     const changeISO = () => {
-        camera.current.setISO(iso)
+        camera.current.setISO(iso);
         setISO(100 + ((iso + 100) % 1000));
     };
 

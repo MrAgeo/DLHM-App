@@ -2,7 +2,7 @@ import { Alert } from 'react-native';
 import { Dirs, FileSystem } from 'react-native-file-access';
 import FlaskServerApi from '../api/flask-server-api';
 
-import { appPaths, basePath, folderNames } from '../features/app';
+import { appPaths, folderNames } from '../features/app';
 
 
 const showDialog = (path, str) => {

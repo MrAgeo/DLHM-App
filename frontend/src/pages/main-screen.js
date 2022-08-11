@@ -3,7 +3,7 @@
  */
 
 // React Imports
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View } from "react-native";
 import { useIsFocused } from '@react-navigation/native';
 
@@ -21,8 +21,8 @@ import { TitleHeader, ButtonPanel } from './main-screen.components';
  * @returns {JSX.Element}
  */
 
-// TODO: Bugfix when holo or ref selected, then press "clear holos / refs" in config screen
-// (is there any onLoad()? -> set null on load)
+// TODO: Find a way to read TIFF images (Image only supports PNG, JPEG, BMP, WEBP & GIF)
+// TODO: Handle different width/height between ref & holo
 const MainScreen = ({ navigation }) => {
     const isFocused = useIsFocused();
 
@@ -37,10 +37,16 @@ const MainScreen = ({ navigation }) => {
                                 }),
                              [selectedHolo, selectedRef]);
     
+    useEffect(() => {
+        setSelectedHolo(null);
+        setSelectedRef(null);
+    }, [isFocused]);
+    
     const btnPanel = <ButtonPanel navigation={navigation} />;
     const titleHeader = <TitleHeader navigation={navigation}/>;
     
     if (!isFocused) return <View style={{flex: 1}}></View>;
+
     return (
         <RepositoryContext.Provider value={repoData}>
             <Screen title={titleHeader} icon={btnPanel}

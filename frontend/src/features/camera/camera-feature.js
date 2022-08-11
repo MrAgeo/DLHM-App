@@ -5,12 +5,13 @@ import { RNCamera } from "react-native-camera";
 import cam_styles from "./camera.sass";
 import styles from "../../config/stylesheets/styles.sass";
 
+
 class CameraFeature extends Component {
     state = {
         iso: 100,
         autoIso: true,
-        autoExposure: true,
-        autoFocus: true,
+        autoExposure: false,
+        autoFocus: false,
         exposureTime: 1/2500, // 0
         exposureCompensation: 0,
         ratio: "4:3",

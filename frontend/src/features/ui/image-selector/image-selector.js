@@ -14,6 +14,7 @@ const ImageSelector = ({ items, numColumns, setSelection }) => {
     const [selectedId, setSelectedId] = useState(null);
 
     const setSelected = (item) => {
+        
         if (selectedId === item.id) {
             setSelectedId(null);
             setSelection(null);

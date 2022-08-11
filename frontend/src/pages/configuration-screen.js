@@ -10,14 +10,17 @@ import cfg_styles from "./stylesheets/configuration-screen.sass";
 import { getFlaskURL, setFlaskURL } from "../config/constants";
 
 // TODO: Confirmation Dialog for "Clear Holos" & "Clear Refs"
+// TODO: Handle no image (response 404) from "Download Last Reconstruction"
 const Item = ({ item }) => {
     const onPress = () => item.onPress(); // in case of async
     return (
-        <TouchableOpacity style={cfg_styles.item} onPress={onPress}>
+        <TouchableOpacity style={cfg_styles.item}
+                          onPress={onPress}>
             <Text style={cfg_styles.text}>{item.text}</Text>
         </TouchableOpacity>
     );
 }
+
 const ConfigurationScreen = ( { navigation } ) => {
     const items = createItems();
     
@@ -25,7 +28,7 @@ const ConfigurationScreen = ( { navigation } ) => {
                     onPress: () => navigation.navigate("Flask Configuration")
                 });
     
-    items.push({text: "Download Rec",
+    items.push({text: "Download Last Reconstruction",
                 onPress: () => FlaskServerApi.GetReconstruction()
                 .then(res => {
                     const p = {uri: `file://${res.path()}`};
@@ -53,7 +56,6 @@ const FlaskServerConfiguration = () => {
         FlaskServerApi.Ping(flaskURL)
         .then(res => res.json())
         .then(res => {
-            console.log(res);
             if (res === "Who likes DHLM-App? :D") {
                 setFlaskURL(flaskURL);
                 Alert.alert("Info", "Flask Server IP changed!");

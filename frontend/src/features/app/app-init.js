@@ -1,6 +1,8 @@
 import { FileSystem, Util } from 'react-native-file-access';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 
+import { getFlaskURL, setFlaskURL } from '../../config/';
+
 const dirs = ReactNativeBlobUtil.fs.dirs
 /*
 --------- RNBlob Dirs ---------
@@ -25,10 +27,15 @@ const dirs = ReactNativeBlobUtil.fs.dirs
 
 */
 
-const basePath = dirs.DCIMDir;
-const appPaths = {holoPath: `${basePath}/Holos`,
-                  refPath: `${basePath}/Refs`,
-                  recPath: `${basePath}/Rec`,};
+const baseImagePath = dirs.DCIMDir;
+const baseDocsPath = `${Util.dirname(baseImagePath)}/Documents`;
+const flaskUrlFilename = "flask.txt";
+const flaskUrlFilepath = `${baseDocsPath}/${flaskUrlFilename}`;
+
+
+const appPaths = {holoPath: `${baseImagePath}/Holos`,
+                  refPath: `${baseImagePath}/Refs`,
+                  recPath: `${baseImagePath}/Rec`,};
 const appFileNames = {holoFileName: "holo.png",
                       refFileName: "ref.png",
                       recFileName: "rec.png"};
@@ -39,10 +46,29 @@ const folderNames = Object.keys(appPaths).map(k => Util.basename(appPaths[k]));
  * Initialize the application
  */
 const initializeApp = async () => {
-    // If there is no "Holos", "Refs" ansd "Rec" folder, create them
+
+    // If there is no "Holos", "Refs" and "Rec" folder, create them
     for (let path in appPaths) {
         if (!(await FileSystem.isDir(appPaths[path]))) FileSystem.mkdir(appPaths[path]).catch(err => console.log(err));
     }
+
+    // Also check Documents dir
+    if (!(await FileSystem.isDir(baseDocsPath))) FileSystem.mkdir(baseDocsPath).catch(err => console.log(err));
+
+    // Save/read Flaskurl to/from disk
+    if (await FileSystem.exists(flaskUrlFilepath)){
+      readFlaskURL();
+    } else {
+      saveFlaskURL();
+    }
 }
 
-export { basePath, appPaths, appFileNames, folderNames, initializeApp };
+const saveFlaskURL = () => {
+    FileSystem.writeFile(flaskUrlFilepath, getFlaskURL(), 'utf8').catch(err => console.log(err));
+}
+
+const readFlaskURL = () => {
+    FileSystem.readFile(flaskUrlFilepath, 'utf8').then(data => setFlaskURL(data)).catch(err => console.log(err));
+}
+
+export { baseImagePath, baseDocsPath, appPaths, appFileNames, folderNames, initializeApp, saveFlaskURL, readFlaskURL };
