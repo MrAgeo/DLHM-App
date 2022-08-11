@@ -1,0 +1,54 @@
+@use "../../../config/stylesheets/classes" as gcl
+@use 'sass:color'
+
+$borderWidthFull: 1.2px
+$borderWidthHalf: 0.6px
+$borderRadius: 5px
+
+$paddingVertical: 15px
+$paddingHorizontal: 5px
+
+$colorSelected: scale-color(gcl.$btnColor, $whiteness: 50%)
+
+%baseBtn
+    flex: 1
+    align-items: center
+    justify-content: center
+    border-top-width: $borderWidthFull
+    border-bottom-width: $borderWidthFull
+    background-color: gcl.$btnColor
+    border-color: scale-color(gcl.$btnColor, $blackness: 20%)
+    padding: $paddingVertical $paddingHorizontal $paddingVertical $paddingHorizontal
+
+.radioFlatlist
+    height: 100%
+    width: 90%
+
+.leftBtn
+    @extend %baseBtn
+    border-left-width: $borderWidthFull
+    border-right-width: $borderWidthHalf
+    border-top-left-radius: $borderRadius
+    border-bottom-left-radius: $borderRadius
+
+.rightBtn
+    @extend %baseBtn
+    border-right-width: $borderWidthFull
+    border-left-width: $borderWidthHalf
+    border-top-right-radius: $borderRadius
+    border-bottom-right-radius: $borderRadius
+
+.centerBtn
+    @extend %baseBtn
+    border-left-width: $borderWidthHalf
+    border-right-width: $borderWidthHalf
+
+.aloneBtn
+    @extend %baseBtn
+    border-left-width: $borderWidthFull
+    border-right-width: $borderWidthFull
+    border-radius: $borderRadius
+
+.colorSelected
+    background-color: $colorSelected
+    //border-color: $colorSelected
