@@ -20,7 +20,7 @@ const MSCameraIcon = ({ navigation }) => {
     const onPressCamera = () => {
         navigation.navigate("Camera");
     }
-    
+
     const size = Math.max(50, 0.14 * windowWidth);
     return (
     <TouchableOpacity style={styles.btnContainer} onPress={onPressCamera}>
@@ -42,7 +42,7 @@ const MSPlusIcon = ({ navigation }) => {
             navigation.navigate("Image Preview", {photo: photo.assets[0]});
         }
     }
-    
+
     const size = Math.max(25, 0.07 * windowWidth);
     return (
     <TouchableOpacity style={plusIconStyle} onPress={onPressPlus}>
@@ -55,9 +55,9 @@ const TitleHeader = ({ navigation }) => {
     const onPressConfig = () => {
         navigation.navigate("Configuration");
     }
-
     const sizeConfig = Math.max(30, 0.08 * windowWidth);
     const sizeEafit = Math.max(100, 0.28 * windowWidth);
+
     return (
     <View style={screen_styles.header}>
         <View style={screen_styles.logoContainer}>
@@ -110,7 +110,7 @@ const ButtonPanel = ({ navigation }) => {
                     // Reset values
                     setSelectedHolo(null);
                     setSelectedRef(null);
-                    
+
                     if (allOk) {
                         navigation.navigate("Reconstruction Configuration", { method, hasRef });
                     }
@@ -118,7 +118,7 @@ const ButtonPanel = ({ navigation }) => {
             });
         });
     }
-    
+
     const msHoloAS = createHoloButton(HoloASIcon,   50, 50, onPressHolo("AS"));
     const msHoloFB = createHoloButton(HoloFBIcon,   45, 45, onPressHolo("FB"));
     const msHoloFN = createHoloButton(HoloFNetIcon, 40, 45, onPressHolo("FNet"));

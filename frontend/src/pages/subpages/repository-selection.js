@@ -14,7 +14,7 @@ import { Text } from "../../features/ui/mini-components";
 
 const titleContainerStyle = styles.jc_afe;
 const titleStyle = [styles.blackTextSmall, {marginBottom: 0}];
-const titleHeightNorm = 0.012; // 7
+const titleHeightNorm = 0.07;
 
 const watermark = [styles.grayTextBig, {textAlign: "center"}];
 

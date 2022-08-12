@@ -210,7 +210,7 @@ const CameraScreen = ({ navigation }) => {
 
 
     return (
-        <Screen titleHeightNorm={.008}
+        <Screen titleHeightNorm={.05}
                 titleContainerStyle={blackBg}
                 contentContainerStyle={blackBg}
                 id="2">

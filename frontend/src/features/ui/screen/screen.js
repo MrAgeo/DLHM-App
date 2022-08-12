@@ -16,9 +16,9 @@ import styles from "./screen.sass"
  */
 const Screen = (props) => {
 
-    const titleHeight = (props.titleHeightNorm || 0.0333) * windowHeight;
-    const bottomHeight = props.icon ? (props.bottomHeightNorm || 0.0167) * windowHeight : 0;
-    const contentHeight = 0.167 * windowHeight - titleHeight - bottomHeight;
+    const titleHeightNorm100 = (props.titleHeightNorm || .2) * 100;
+    const bottomHeightNorm100 = props.icon ? (props.bottomHeightNorm || .1) * 100 : 0;
+    const contentHeightNorm100 = 100 - titleHeightNorm100 - bottomHeightNorm100;
 
     // Text style
     const titleStyle = props.titleStyle ? [styles.title, props.titleStyle] : styles.title;
@@ -26,17 +26,17 @@ const Screen = (props) => {
     const screenContainer = props.containerStyle ?
                                 [styles.screenContainer, props.containerStyle]
                                 : styles.screenContainer;
-    
-    const screenTitle = props.titleContainerStyle ? 
+
+    const screenTitle = props.titleContainerStyle ?
         	[styles.screenTitle, props.titleContainerStyle] : [styles.screenTitle];
     const screenContent = props.contentContainerStyle ?
             [styles.screenContent, props.contentContainerStyle] : [styles.screenContent];
     const screenBottom = props.bottomContainerStyle ?
             [styles.screenBottom, props.bottomContainerStyle] : [styles.screenBottom];
 
-    screenTitle.push({height: titleHeight.toString() + "%"});
-    screenContent.push({height: contentHeight.toString() + "%"});
-    screenBottom.push({height: bottomHeight.toString() + "%"});
+    screenTitle.push({height: `${titleHeightNorm100}%`});
+    screenContent.push({height: `${contentHeightNorm100}%`});
+    screenBottom.push({height: `${bottomHeightNorm100}%`});
 
     return (
         <View style={screenContainer} key={props.id}>

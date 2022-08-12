@@ -14,7 +14,7 @@ import { windowWidth } from "../../config";
 
 const PreviewScreen = ({ route, navigation, title, id, extraContent, extraOnPress }) => {
 
-    
+
 
     const {photo, file} = route.params;
     const img = file || photo ;
@@ -36,13 +36,13 @@ const PreviewScreen = ({ route, navigation, title, id, extraContent, extraOnPres
         <TouchableOpacity style={styles.btnContainer} onPress={onPress}>
             <HomeIcon width={size} height={size}/>
         </TouchableOpacity>);
-    
+
     if (!isFocused) return <View style={{flex: 1}}></View>;
     return (
         <Screen title={title}
                 icon={icon}
                 id={id}
-                titleHeightNorm={0.0167}>
+                titleHeightNorm={0.1}>
             <View style={preview_styles.imgContainer}>
                 {(img === null
                         ?
