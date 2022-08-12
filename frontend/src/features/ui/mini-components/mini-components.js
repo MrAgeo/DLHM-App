@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useEffect } from 'react';
+import { View, Text as Txt, TextInput as TxtInput, TouchableOpacity, StyleSheet } from "react-native";
+import { maxFontSize } from '../../../config';
 
 import styles from "./mini-components.sass";
 
@@ -28,6 +29,43 @@ const TouchableText = ({ text, children, onPress, style, textStyle }) => {
         <Text style={txtStyle}>{text || children}</Text>
     </TouchableOpacity>
     );
+};
+
+
+// Text & TextInput style analyzer
+const getNewStyle = (style) => {
+    const flattenedStyle = StyleSheet.flatten(style);
+    let fontSize;
+
+    if (Object.keys(flattenedStyle).length !== 0){ // if style is not undefined
+        if (flattenedStyle.fontSize === undefined) {
+            fontSize = {fontSize: 0.25 * maxFontSize};
+        } else {
+            if (typeof flattenedStyle.fontSize === "number") {
+                fontSize = {fontSize: Math.min(flattenedStyle.fontSize, maxFontSize)};
+            } else if (typeof flattenedStyle.fontSize === "string" &&
+                       flattenedStyle.fontSize.endsWith("%")){
+                fontSize = {
+                            fontSize: 0.01 * maxFontSize *
+                                      parseFloat(flattenedStyle.fontSize.substring(0,
+                                                    flattenedStyle.fontSize.length - 1))
+                           };
+            } else {
+                fontSize = {}; // replace nothing
+            }
+        }
+    }
+    return Object.assign({}, flattenedStyle, fontSize);
 }
 
-export { Separator, InfoView, TouchableText };
+const Text = ({style, ...otherProps}) => {
+    const newStyle = getNewStyle(style);
+    return <Txt style={newStyle} {...otherProps} />;
+};
+
+const TextInput = ({style, ...otherProps}) => {
+    const newStyle = getNewStyle(style);
+    return <TxtInput style={newStyle} {...otherProps} />;
+};
+
+export { Separator, InfoView, TouchableText, Text, TextInput };
