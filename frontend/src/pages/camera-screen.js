@@ -5,7 +5,7 @@ import { RNCamera } from "react-native-camera";
 import { Svg, Circle } from "react-native-svg";
 
 import { ParamButtons, ParamSlider } from "./camera-screen.components";
-import { TouchableText } from "../features/ui/mini-components/mini-components";
+import { TouchableText } from "../features/ui/mini-components";
 import { CameraFeature } from "../features/camera";
 import { Screen } from "../features/ui/screen";
 import styles from "../config/stylesheets/styles.sass";
@@ -210,7 +210,7 @@ const CameraScreen = ({ navigation }) => {
 
 
     return (
-        <Screen titleHeight={5}
+        <Screen titleHeightNorm={.008}
                 titleContainerStyle={blackBg}
                 contentContainerStyle={blackBg}
                 id="2">

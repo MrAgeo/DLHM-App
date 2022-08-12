@@ -3,9 +3,11 @@
  */
 
  import React from 'react';
- import { FlatList, Text, View } from "react-native";
+ import { FlatList, View } from "react-native";
+import { Text } from '../mini-components';
 
 import styles from './item-list.sass'
+
 
 // Item definition
 const Item = ({ title, index }) => (

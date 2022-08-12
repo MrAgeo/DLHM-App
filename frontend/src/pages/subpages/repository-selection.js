@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text } from "react-native";
-import { Dirs, FileSystem } from 'react-native-file-access';
+import { View } from "react-native";
+import { FileSystem } from 'react-native-file-access';
 
 import styles from "../../config/stylesheets/styles.sass";
 
@@ -10,10 +10,11 @@ import { ImageSelector } from "../../features/ui/image-selector/image-selector";
 import { RepositoryContext } from "../contexts";
 import { createImg } from "../../utils";
 import { useIsFocused } from "@react-navigation/native";
+import { Text } from "../../features/ui/mini-components";
 
 const titleContainerStyle = styles.jc_afe;
 const titleStyle = [styles.blackTextSmall, {marginBottom: 0}];
-const titleHeight = 7;
+const titleHeightNorm = 0.012; // 7
 
 const watermark = [styles.grayTextBig, {textAlign: "center"}];
 
@@ -42,7 +43,7 @@ const RepoGallery = (props) => {
     return (
         <Screen title={props.title}
                 titleStyle={titleStyle}
-                titleHeight={titleHeight}
+                titleHeightNorm={titleHeightNorm}
                 titleContainerStyle={titleContainerStyle}
                 contentContainerStyle={bgColor}>
             {(items === null || items.length === 0 ?

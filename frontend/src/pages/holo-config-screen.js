@@ -4,8 +4,7 @@
 
 // React Imports
 import React, { useState } from 'react';
-import { Alert, TextInput, View, FlatList, TouchableOpacity, Text } from "react-native";
-
+import { Alert, View, FlatList, TouchableOpacity } from "react-native";
 
 // Custom imports
 import styles from "../config/stylesheets/styles.sass";
@@ -13,21 +12,35 @@ import cfg_styles from "./stylesheets/configuration-screen.sass";
 import { createImg, isNumeric } from '../utils';
 import FlaskServerApi from '../api/flask-server-api';
 import { windowHeight } from '../config/constants';
-import { RadioButton } from '../features/ui/radio-button/radio-button';
+import { RadioButton } from '../features/ui/radio-button';
+import { Text, TextInput } from "../features/ui/mini-components";
 
 
 const Item = ({ item }) => {
-    return (
-        <View style={cfg_styles.holoItem}>
-            {/* <View style={cfg_styles.holoTextContainer}> */}
-                <Text style={cfg_styles.text}>{item.text}</Text>
-            {/* </View> */}
+    let ItemComponent;
+    
+    if (item.inputType === "TextInput") {
+        ItemComponent = () => (
             <TextInput style={cfg_styles.holoTextInput}
                 onChangeText={item.setValue}
                 value={item.value}
                 placeholder={item.description}
                 placeholderTextColor={"#aaa"}
-                keyboardType={item.keyboardType} />
+                keyboardType={item.keyboardType} />);
+    } else if (item.inputType === "RadioButton") {
+        ItemComponent = () => (
+            <RadioButton options={item.options} setSelection={item.setValue}/>
+        );
+    } else if (item.inputType == "custom") {
+        ItemComponent = item.customComponent;
+    }
+
+    return (
+        <View style={cfg_styles.holoItem}>
+            {/* <View style={cfg_styles.holoTextContainer}> */}    
+            <Text style={cfg_styles.text}>{item.text}</Text>
+            {/* </View> */}
+             <ItemComponent />
         </View>
     );
 }
@@ -69,9 +82,10 @@ const HoloConfigScreen = ({ navigation, route }) => {
         for (let item of itemList){
             if (item.text === "Constant"){
                 if ( !(isNumeric(item.value) || holoRefFnOptions.includes(item.value))) {
-                    msg = `Value of parameter '${item.text}' must be numeric or 'mean'`;
+                    msg = `Value of parameter 'Constant' must be numeric or 'mean'`;
                     break;
                 }
+                params["Constant"] = item.value.toLowerCase()
             } else {
                 if (isNumeric(item.value)) {
                     if (parseFloat(item.value) <= 0){
@@ -82,8 +96,8 @@ const HoloConfigScreen = ({ navigation, route }) => {
                     msg = `Value of parameter '${item.text}' must be numeric.`;
                     break;
                 }
+                params[item.text] = item.value;
             }
-            params[item.text] = item.value;
         }
 
         if (holoType === null) {
@@ -131,11 +145,15 @@ const HoloConfigScreen = ({ navigation, route }) => {
         desc.push("Number or 'mean'");
     }
     
-    const listHeight = 117 * text.length;
-    const contentHeight = windowHeight - 156;
-    const btnContainerHeight = 120;
-    const btnContainer = [{height: btnContainerHeight, borderTopColor: "#ccc", borderTopWidth: 1}, styles.jc_ac];
-    const listContainer = {height: listHeight > contentHeight ? contentHeight - btnContainerHeight: listHeight};
+    const titleHeight = .2 * windowHeight;
+    const listHeight =  .6 * windowHeight;
+    const totalContentHeight = titleHeight + listHeight;
+    const maxContentHeight = .7 * windowHeight;
+    const btnContainerHeight = .2 * windowHeight;
+
+    const btnContainer = [{height: btnContainerHeight, borderTopColor: "#888", borderTopWidth: 1}, styles.jc_ac];
+    
+    const listContainer = {height: totalContentHeight > maxContentHeight? maxContentHeight - btnContainerHeight: listHeight};
 
     let itemList = [];
 
@@ -143,11 +161,17 @@ const HoloConfigScreen = ({ navigation, route }) => {
         const [value, setValue] = useState(null);
         itemList.push({text: text[i], description: desc[i],
                         value: value, setValue: setValue,
+                        inputType: "TextInput",
                         keyboardType: text[i] === "Constant"? "default" : "phone-pad"});
     }
 
-    const renderItem = ({ item }) => (<Item item={item}/>);
+    itemList.push({text: "Hologram Type",
+                   setValue: setHoloType,
+                   options: holoTypeOptions,
+                   inputType: "RadioButton",
+                })
 
+    const renderItem = ({ item }) => (<Item item={item}/>);
 
     return (
         <View style={cfg_styles.configScreen}>
@@ -156,11 +180,10 @@ const HoloConfigScreen = ({ navigation, route }) => {
             </View>
             <View style={listContainer}>
                 <FlatList
+                    persistentScrollbar={true}
                     data={itemList}
                     renderItem={renderItem} />
             </View>
-            <Text style={cfg_styles.text}>Hologram Type</Text>
-            <RadioButton options={holoTypeOptions} setSelection={setHoloType}/>
             <View style={btnContainer}>
                 <TouchableOpacity style={cfg_styles.btnClear}
                     onPress={onPress}>

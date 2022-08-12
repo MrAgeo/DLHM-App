@@ -23,6 +23,9 @@ import { TitleHeader, ButtonPanel } from './main-screen.components';
 
 // TODO: Find a way to read TIFF images (Image only supports PNG, JPEG, BMP, WEBP & GIF)
 // TODO: Handle different width/height between ref & holo
+
+// HIGHT PRIORITY
+// TODO: Use base64 in upload (save camera image in base64?)
 const MainScreen = ({ navigation }) => {
     const isFocused = useIsFocused();
 

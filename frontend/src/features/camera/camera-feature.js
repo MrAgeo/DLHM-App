@@ -1,11 +1,11 @@
 import React, { Component, useEffect } from "react";
-import { View, Text, Alert } from "react-native";
+import { View, Alert } from "react-native";
 import { RNCamera } from "react-native-camera";
 
 import cam_styles from "./camera.sass";
 import styles from "../../config/stylesheets/styles.sass";
 
-
+// TODO: Maybe set base64 to ttrue in "takePicture"?
 class CameraFeature extends Component {
     state = {
         iso: 100,
@@ -45,7 +45,7 @@ class CameraFeature extends Component {
     setExposureCompensation(val) {
         this.setState({exposureCompensation: val});
     }
-    
+
     setAutoExposure(val) {
         this.setState({autoExposure: val});
     }
@@ -87,17 +87,17 @@ class CameraFeature extends Component {
     }
 
 
-    
+
     async onCameraReady() {
             const ratios = await this.cameraRef.getSupportedRatiosAsync().catch(err => console.log(err));
             if (ratios) {
                 if (ratios.find(i => i === '1:1')) {
                     this.setRatio('1:1');
                 } else {
-                    Alert.alert("Could not set 1:1 ratio")
+                    Alert.alert("Warning", "Could not set 1:1 ratio");
                 }
             }
-            
+
             const pictureSizes = await this.cameraRef.getAvailablePictureSizes(this.state.ratio)
                 .catch(err => console.log(err));
             if (pictureSizes) {
@@ -105,6 +105,9 @@ class CameraFeature extends Component {
             }
         // this.setAutoExposure(false);
         // this.setDefaultValues();
+
+        if (await this.cameraRef.isLegacy())
+            Alert.alert("Warning", "Legacy camera detected. The app may cause errors.");
     }
 
     async takePic() {
@@ -124,7 +127,7 @@ class CameraFeature extends Component {
         super(props);
 
         const baseOverlayStyle = {flex: 1, width: "100%", flexDirection: "column", backgroundColor: "#0000"};
-        
+
         this.cameraRef = null;
         this.overlayStyle = props.style === null ? baseOverlayStyle : [baseOverlayStyle, props.style];
     }
@@ -136,7 +139,7 @@ class CameraFeature extends Component {
                 <View style={[cam_styles.container, styles.jc_ac]}>
                     <RNCamera style={cam_styles.preview}
                             ref={ref => this.cameraRef = ref}
-    
+
                             exposure={this.state.exposureCompensation}
                             exposureTime={this.state.exposureTime}
                             zoom={this.state.zoom}
@@ -145,8 +148,8 @@ class CameraFeature extends Component {
                             pictureSize={this.state.pictureSize}
                             whiteBalance={this.state.whiteBalance}
                             iso={this.state.iso}
-                            
-                            
+
+
                             autoFocus={this.state.autoFocus}
                             autoExposure={this.state.autoExposure}
                             useCamera2Api={true}

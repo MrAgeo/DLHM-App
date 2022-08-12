@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
+import { View, FlatList, TouchableOpacity } from "react-native";
 
 import styles from "../../../config/stylesheets/styles.sass";
 import radio_styles from "./radio-button.sass";
+import { Text } from "../mini-components";
+import { windowHeight, windowWidth } from "../../../config";
+
 
 const btnStyles = [radio_styles.leftBtn, radio_styles.centerBtn, radio_styles.rightBtn, radio_styles.aloneBtn];
 
@@ -15,9 +18,10 @@ const Item = ({ item, onPress, bgColor }) => {
     );
 }
 
-const RadioButton = ({ height, width, options, initialSelection, setSelection }) => {
-    const btnContainerHeight = height || 100;
-    const btnContainer = [{height: btnContainerHeight, width: width}, styles.jc_ac];
+const RadioButton = ({ heightNorm, widthNorm, options, initialSelection, setSelection }) => {
+    const btnContainerHeight = heightNorm || 0.11;
+    const btnContainerWidth = widthNorm || 0.9;
+    const btnContainer = [{height: btnContainerHeight * windowHeight, width: btnContainerWidth * windowWidth}, styles.jc_ac];
 
 
     const btns = options.length == 1 ?

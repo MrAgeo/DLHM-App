@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 
 import { PreviewScreen } from "./base-pages/preview-screen";
 import { FileSystem } from 'react-native-file-access';
 import { RadioButton } from "../features/ui/radio-button/radio-button";
+import { Text } from "../features/ui/mini-components";
 
 import styles from "../config/stylesheets/styles.sass";
+import { windowHeight } from "../config";
 
 const ReconstructionViewScreen = ({ route, navigation }) => {
     const [del, setDelete] = useState(false);
@@ -19,10 +21,11 @@ const ReconstructionViewScreen = ({ route, navigation }) => {
             });
     };
     
+    const radioBtnStyle = [{ flexDirection: "column", height: 0.167 * windowHeight, width: "60%"},styles.jc_ac];
     const radioBtn = (
-        <View style={[{ flexDirection: "column", height: 100, width: "60%"},styles.jc_ac]}>
+        <View style={radioBtnStyle}>
             <Text style={styles.blackTextSmall}>Delete File?</Text>
-            <RadioButton height={60}
+            <RadioButton height={0.1 * windowHeight}
                          width={"100%"}
                          options={["Yes", "No"]}
                          initialSelection={1}

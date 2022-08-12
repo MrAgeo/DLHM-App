@@ -7,11 +7,12 @@
 //  React Imports
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from "@react-navigation/native";
-import { PermissionsAndroid, View, Text, Button } from "react-native";
+import { PermissionsAndroid, View, Button } from "react-native";
 
 // Custom imports
 import { NavigationStack } from "../navigation";
 import styles from "../../config/stylesheets/styles.sass";
+import { Text } from '../ui/mini-components';
 
 /**
  * Creates the app

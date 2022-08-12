@@ -1,5 +1,5 @@
 import React from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { FileSystem, Util } from 'react-native-file-access';
 
 import styles from "../config/stylesheets/styles.sass";
@@ -7,6 +7,7 @@ import preview_styles from "./base-pages/stylesheets/preview-screen.sass";
 import { appPaths } from "../features/app";
 import { PreviewScreen } from "./base-pages/preview-screen";
 import { generateUniqueFileName } from "../utils";
+import { Text } from "../features/ui/mini-components";
 
 const RepoPreviewScreen = ({ route, navigation }) => {
 

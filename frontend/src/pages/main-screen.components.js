@@ -1,7 +1,7 @@
 
 // React Imports
 import React, { useContext } from 'react';
-import { Text, TouchableOpacity, View, Alert } from "react-native";
+import { TouchableOpacity, View, Alert } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 
 // Asset imports
@@ -13,15 +13,18 @@ import styles from "../config/stylesheets/styles.sass";
 
 import FlaskServerApi from '../api/flask-server-api';
 import { RepositoryContext } from './contexts';
+import { Text } from '../features/ui/mini-components';
+import { windowWidth } from '../config';
 
 const MSCameraIcon = ({ navigation }) => {
     const onPressCamera = () => {
         navigation.navigate("Camera");
     }
     
+    const size = Math.max(50, 0.14 * windowWidth);
     return (
     <TouchableOpacity style={styles.btnContainer} onPress={onPressCamera}>
-        <CameraIcon width={50} height={50} fill="#000"/>
+        <CameraIcon width={size} height={size} fill="#000"/>
     </TouchableOpacity>);
 }
 
@@ -40,9 +43,10 @@ const MSPlusIcon = ({ navigation }) => {
         }
     }
     
+    const size = Math.max(25, 0.07 * windowWidth);
     return (
     <TouchableOpacity style={plusIconStyle} onPress={onPressPlus}>
-        <PlusIcon width={25} height={25} fill="#000"/>
+        <PlusIcon width={size} height={size} fill="#000"/>
     </TouchableOpacity>);
 }
 
@@ -52,11 +56,13 @@ const TitleHeader = ({ navigation }) => {
         navigation.navigate("Configuration");
     }
 
+    const sizeConfig = Math.max(30, 0.08 * windowWidth);
+    const sizeEafit = Math.max(100, 0.28 * windowWidth);
     return (
     <View style={screen_styles.header}>
         <View style={screen_styles.logoContainer}>
-            <ConfigIcon width={30} height={30} onPress={onPressConfig} />
-            <EafitLogo width={100} height={50} style={img_styles.logo_img}/>
+            <ConfigIcon width={sizeConfig} height={sizeConfig} onPress={onPressConfig} />
+            <EafitLogo width={sizeEafit} height={ 0.5 * sizeEafit} style={img_styles.logo_img}/>
         </View>
         <View style={screen_styles.titleHeaderContainer}>
             <View style={screen_styles.title}>
@@ -85,32 +91,32 @@ const ButtonPanel = ({ navigation }) => {
     const onPressHolo = (method) => {
         return ( () => {
             // navigation.navigate("Reconstruction Configuration", { method });
-                FlaskServerApi.UploadDLHM(selectedHolo, selectedRef)
-                .then(res => {
-                    if (res !== null){
-                        let allOk = true;
+            FlaskServerApi.UploadDLHM(selectedHolo, selectedRef)
+            .then(res => {
+                if (res !== null){
+                    let allOk = true;
 
-                        if (!res.holo[0]) {
-                            allOk = false;
-                            Alert.alert("Error by Holo Upload", res.holo[1]);
-                        }
-                        if (selectedRef !== null && !res.ref[0]) {
-                            allOk = false;
-                            Alert.alert("Error by Ref Upload", res.ref[1]);
-                        }
-
-                        const hasRef = selectedRef !== null;
-
-                        // Reset values
-                        setSelectedHolo(null);
-                        setSelectedRef(null);
-                        
-                        if (allOk) {
-                            navigation.navigate("Reconstruction Configuration", { method, hasRef });
-                        }
+                    if (!res.holo[0]) {
+                        allOk = false;
+                        Alert.alert("Error by Holo Upload", res.holo[1]);
                     }
-                });
+                    if (selectedRef !== null && !res.ref[0]) {
+                        allOk = false;
+                        Alert.alert("Error by Ref Upload", res.ref[1]);
+                    }
+
+                    const hasRef = selectedRef !== null;
+
+                    // Reset values
+                    setSelectedHolo(null);
+                    setSelectedRef(null);
+                    
+                    if (allOk) {
+                        navigation.navigate("Reconstruction Configuration", { method, hasRef });
+                    }
+                }
             });
+        });
     }
     
     const msHoloAS = createHoloButton(HoloASIcon,   50, 50, onPressHolo("AS"));

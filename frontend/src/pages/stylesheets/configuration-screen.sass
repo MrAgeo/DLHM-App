@@ -15,7 +15,7 @@
 
 .item
   @extend %baseItem
-  height: 55px
+  height: 55px // must be in px :/
 
 $verticalMargin: 10px
 .text
@@ -28,7 +28,7 @@ $verticalMargin: 10px
 .configScreen
   flex: 1
   flex-direction: column
-  background-color: #ddd
+  background-color: #e5e5e5
   justify-content: flex-start
   align-items: stretch
 
@@ -44,10 +44,11 @@ $verticalMargin: 10px
 
 .titleContainer
   @extend %baseItem
-  height: 100px
+  height: 20%
   justify-content: center
   padding-top: 5%
   padding-bottom: 7%
+  border-bottom-color: #888
   // border: 2px solid blue
 
 .btnClear
@@ -65,3 +66,6 @@ $verticalMargin: 10px
   @include gcl.blackText(false) // No margins
   font-size: gc.$fontSmall
   background-color:#fff
+
+.holoFlatList
+  height: 70%

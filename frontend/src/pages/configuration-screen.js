@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, TouchableOpacity, Text,  FlatList, Alert } from "react-native";
+import { View, TouchableOpacity,  FlatList, Alert } from "react-native";
 
 
 import { createItems } from "./configuration-screen.options";
@@ -7,7 +7,9 @@ import FlaskServerApi from '../api/flask-server-api';
 
 import styles from "../config/stylesheets/styles.sass";
 import cfg_styles from "./stylesheets/configuration-screen.sass";
-import { getFlaskURL, setFlaskURL } from "../config/constants";
+import { getFlaskURL, setFlaskURL, windowHeight } from "../config/constants";
+import { TextInput, Text } from "../features/ui/mini-components";
+
 
 // TODO: Confirmation Dialog for "Clear Holos" & "Clear Refs"
 // TODO: Handle no image (response 404) from "Download Last Reconstruction"
@@ -39,12 +41,13 @@ const ConfigurationScreen = ( { navigation } ) => {
     
     return (
         <FlatList
+            persistentScrollbar={true}
             data={items}
             renderItem={renderItem} />
     );
 }
 
-const containerStyle = {height: 100};
+const containerStyle = {height: 0.1 * windowHeight};
 const titleContainerStyle = [cfg_styles.titleContainer, {borderBottomWidth: 0}]
 const textInputStyle = [cfg_styles.holoTextInput, {marginHorizontal: "5%"}];
 
@@ -69,13 +72,12 @@ const FlaskServerConfiguration = () => {
         });
     }
 
+    const btnContainer = [{height: 0.15 * windowHeight},styles.jc_ac]
     return (
     <View style={cfg_styles.configScreen}>
-        <View style={containerStyle}>
             <View style={titleContainerStyle}>
                 <Text style={cfg_styles.title}>{" Flask Server IP "}</Text>
             </View>
-        </View>
         <View style={containerStyle}>
             <TextInput style={textInputStyle}
                 onChangeText={setURL}
@@ -84,9 +86,7 @@ const FlaskServerConfiguration = () => {
                 placeholderTextColor={"#aaa"}
                 keyboardType="url" />
         </View>
-        <View style={[{height: 80},
-                    //{borderColor: "#f00", borderWidth:2},
-                    styles.jc_ac]}>
+        <View style={btnContainer}>
             <TouchableOpacity style={styles.btnClear}
                 onPress={onPress}>
                     <Text style={styles.blackTextSmall_nm}>Ok</Text>

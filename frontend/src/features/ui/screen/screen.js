@@ -2,7 +2,9 @@
  * Screen Component
  */
 import React from 'react';
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import { windowHeight } from '../../../config';
+import { Text } from '../mini-components/';
 
 import styles from "./screen.sass"
 
@@ -14,9 +16,9 @@ import styles from "./screen.sass"
  */
 const Screen = (props) => {
 
-    const titleHeight = props.titleHeight || 20;
-    const bottomHeight = props.icon ? (props.bottomHeight || 10) : 0;
-    const contentHeight = 100 - titleHeight - bottomHeight;
+    const titleHeight = (props.titleHeightNorm || 0.0333) * windowHeight;
+    const bottomHeight = props.icon ? (props.bottomHeightNorm || 0.0167) * windowHeight : 0;
+    const contentHeight = 0.167 * windowHeight - titleHeight - bottomHeight;
 
     // Text style
     const titleStyle = props.titleStyle ? [styles.title, props.titleStyle] : styles.title;

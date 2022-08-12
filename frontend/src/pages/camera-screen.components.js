@@ -4,6 +4,7 @@ import { TouchableText } from "../features/ui/mini-components/mini-components";
 import { FlatList } from "react-native";
 import cam_styles from "./stylesheets/camera-screen.sass";
 import { Slider } from "@miblanchard/react-native-slider";
+import { windowWidth } from "../config";
 
 const Item = ({ item, onPress, color }) => {
     return (
@@ -59,6 +60,9 @@ const ParamSlider = ({ visible, sliderFn, sliderMinimum,
     const onSlidingStart = () => {if(isAuto) toggle()};
     const onValueChange = val => {if (!(sliderFn === null)) sliderFn(val[0])};
     
+    const trackStyle={height: 1};
+    const touchSize= Math.max(0.55 * windowWidth, 20);
+    const thumbTouchSize = {width: touchSize, height: touchSize};
     return (
         <View style={cam_styles.sliderContainer}>
             <View style={cam_styles.autoButtonContainer}>
@@ -69,8 +73,8 @@ const ParamSlider = ({ visible, sliderFn, sliderMinimum,
             <Slider containerStyle={cam_styles.slider}
                     maximumTrackTintColor={"#fff"}
                     minimumTrackTintColor={"#fff"}
-                    trackStyle={{height:1}}
-                    thumbTouchSize={{width:20, height:20}}
+                    trackStyle={trackStyle}
+                    thumbTouchSize={thumbTouchSize}
                     minimumValue={sliderMinimum}
                     maximumValue={sliderMaximum}
                     onValueChange={onValueChange}
