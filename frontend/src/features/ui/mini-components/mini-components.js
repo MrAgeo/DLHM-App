@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, Text as Txt, TextInput as TxtInput, TouchableOpacity, StyleSheet } from "react-native";
 import { maxFontSize } from '../../../config';
 
