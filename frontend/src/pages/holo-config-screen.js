@@ -15,32 +15,27 @@ import { windowHeight } from '../config/constants';
 import { RadioButton } from '../features/ui/radio-button';
 import { Text, TextInput } from "../features/ui/mini-components";
 
-
 const Item = ({ item }) => {
-    let ItemComponent;
-    
-    if (item.inputType === "TextInput") {
-        ItemComponent = () => (
-            <TextInput style={cfg_styles.holoTextInput}
-                onChangeText={item.setValue}
-                value={item.value}
-                placeholder={item.description}
-                placeholderTextColor={"#aaa"}
-                keyboardType={item.keyboardType} />);
-    } else if (item.inputType === "RadioButton") {
-        ItemComponent = () => (
-            <RadioButton options={item.options} setSelection={item.setValue}/>
-        );
-    } else if (item.inputType == "custom") {
-        ItemComponent = item.customComponent;
-    }
-
     return (
         <View style={cfg_styles.holoItem}>
             {/* <View style={cfg_styles.holoTextContainer}> */}    
             <Text style={cfg_styles.text}>{item.text}</Text>
             {/* </View> */}
-             <ItemComponent />
+             {( item.inputType === "TextInput" ?
+                    <TextInput
+                        style={cfg_styles.holoTextInput}
+                        onChangeText={item.setValue}
+                        value={item.value}
+                        placeholder={item.description}
+                        placeholderTextColor={"#aaa"}
+                        keyboardType={item.keyboardType} />
+                : // else
+                    ( item.inputType === "RadioButton" ?
+                        <RadioButton options={item.options} setSelection={item.setValue}/>
+                    : //else
+                        item.customComponent
+                    )
+                )}
         </View>
     );
 }
@@ -79,7 +74,7 @@ const HoloConfigScreen = ({ navigation, route }) => {
             params["Wavelength"] = "473";
         }
 
-        for (let item of itemList){
+        for (let item of items2check){
             if (item.text === "Constant"){
                 if ( !(isNumeric(item.value) || holoRefFnOptions.includes(item.value))) {
                     msg = `Value of parameter 'Constant' must be numeric or 'mean'`;
@@ -159,17 +154,24 @@ const HoloConfigScreen = ({ navigation, route }) => {
 
     for (let i=0; i<text.length; i++) {
         const [value, setValue] = useState(null);
-        itemList.push({text: text[i], description: desc[i],
+        itemList.push({ text: text[i],
+                        description: desc[i],
+                        id: i,
                         value: value, setValue: setValue,
                         inputType: "TextInput",
-                        keyboardType: text[i] === "Constant"? "default" : "phone-pad"});
+                        keyboardType: text[i] === "Constant"? "default" : "phone-pad"
+                      });
     }
 
     itemList.push({text: "Hologram Type",
                    setValue: setHoloType,
                    options: holoTypeOptions,
                    inputType: "RadioButton",
-                })
+                   id: itemList.length
+                });
+    
+    // Check only the TextInput-type items
+    const items2check = itemList.filter( item => item.inputType === "TextInput");
 
     const renderItem = ({ item }) => (<Item item={item}/>);
 
