@@ -48,7 +48,7 @@ def reconstruct(holo_filepath, ref_filepath=None, options=None, outpath=None):
     ref = None
     if ref_filepath is None:
         try:
-            ref = np.ones((min_val, min_val), dtype=_DTYPE) * float(options["Constant"])
+            ref = np.ones((min_val, min_val), dtype=_DTYPE) * 255 * float(options["Constant"])
         except ValueError:
             if options["Constant"] == "mean":
                 ref = np.mean(holo[:min_val,:min_val, channel])

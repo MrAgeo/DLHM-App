@@ -76,10 +76,17 @@ const HoloConfigScreen = ({ navigation, route }) => {
 
         for (let item of items2check){
             if (item.text === "Constant"){
-                if ( !(isNumeric(item.value) || holoRefFnOptions.includes(item.value))) {
+                if ( !(isNumeric(item.value) || holoRefFnOptions.includes(item.value.toLowerCase()))) {
                     msg = `Value of parameter 'Constant' must be numeric or 'mean'`;
                     break;
+                } else {
+                    const val = parseFloat(item.value);
+                    if (val < 0 || val > 1) {
+                        msg = `Value of parameter 'Constant' must be between 0 and 1`;
+                        break;
+                    }
                 }
+                
                 params["Constant"] = item.value.toLowerCase()
             } else {
                 if (isNumeric(item.value)) {
@@ -137,7 +144,7 @@ const HoloConfigScreen = ({ navigation, route }) => {
 
     if (!hasRef) {
         text.push("Constant");
-        desc.push("Number or 'mean'");
+        desc.push("Number (0 - 1) or 'mean'");
     }
     
     const titleHeight = .2 * windowHeight;
