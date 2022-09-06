@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """Digital in-Line Holography Microscopy Library.
 
-All functions were adapted from Juan Pablo Piedrahita Quintero, Jorge Garcia Sucerquia & John Restrepo's MATLAB code.
+First version: Maria J Lopera (2018)
+Second version (this file): Sergio Jurado Torres (2022)
 
-By Sergio Jurado Torres (2022)
+All functions were adapted from Juan Pablo Piedrahita Quintero, Jorge Garcia Sucerquia & John Restrepo's MATLAB code.
 """
 
 import numpy as np
@@ -28,12 +29,12 @@ def propagate(field, L, z, wavelength, dx_in, dx_out):
         field (np.ndarray): Input complex field.
         z (float): Propagation distance.
         wavelength (float): Wavelength.
-        dx_in (float or iterable): Input pixel pitch. If its an iterable,
-                                   X and Y values will be taken.
-                                   Else, Y pixel pitch will be dx_in.
+        dx_in (float or iterable): Input pixel pitch.
+                                   If dx_in is a float, then dy_in = dx_in;
+                                   Else, the iterable is assumed as (dx_in, dy_in).
         dx_out (float or iterable): Output pixel pitch.
-                                    X and Y values will be taken.
-                                    Else, Y pixel pitch will be dx_out.
+                                   If dx_out is a float, then dy_out = dx_out;
+                                   Else, the iterable is assumed as (dx_out, dy_out).
     
     # Returns
         A numpy array representing the diffracted field.
@@ -47,19 +48,21 @@ def kreuzer3F(CH_m, z, L, wavelength, deltax, deltaX, CF, fname=None):
     Jürgen Kreuzer's patent (US6411406B1).
     
     # Arguments
-        CH_m (numpy.ndarray): The contrast hologram
+        CH_m (numpy.ndarray): The contrast hologram.
         z (float): Source to sample distance.
         L (float): Source to camera distance.
         wavelength (float): Wavelength.
         deltax (float or iterable): Hologram plane pixel pitch (real pixel size).
-                                    If float then deltay = deltax
+                                    If deltax is a float, then deltay = deltax;
+                                    Else, the iterable is assumed as (deltax, deltay).
         deltaX (float or iterable): Object plane pixel pitch.
-                                    If float then deltaY = deltaX
+                                    If deltaX is a float, then deltaY = deltaX;
+                                    Else, the iterable is assumed as (deltaX, deltaY).
         CF (numpy.ndarray): Cosine filter matrix.
         fname (str): (Optional) File name of the saved prepared hologram. It will be loaded
                      through numpy's load() function.
     # Returns
-        A numpy array representing the reconstructed hologram
+        A numpy array representing the reconstructed hologram.
     """
     if isinstance(deltaX, (tuple,list)):
         deltaY = deltaX[1]
@@ -157,14 +160,14 @@ def kreuzer3F(CH_m, z, L, wavelength, deltax, deltaX, CF, fname=None):
 
 
 def prepairholoF(CH_m, xop, yop, Xp, Yp):
-    """User function to prepare the hologram using nearest neighboor interpolation strategy.
+    """User function to prepare the hologram using nearest neighbor interpolation strategy.
     
     # Arguments
-        CH_m (numpy.ndarray): The hologram
-        xop (float): X coordinate origin
-        yop (float): Y coordinate origin
-        Xp (numpy.ndarray): X plane mesh
-        Yp (numpy.ndarray): Y plane mesh
+        CH_m (numpy.ndarray): The hologram.
+        xop (float): X coordinate origin.
+        yop (float): Y coordinate origin.
+        Xp (numpy.ndarray): X plane mesh.
+        Yp (numpy.ndarray): Y plane mesh.
     
     # Returns
         A numpy array representing the prepared hologram.
@@ -213,12 +216,12 @@ def filtcosF(par,M):
     
     # Arguments
         par (float): Size parameter
-        M (int or iterable): Matrix size.
-                             If M is an int, N=M.
-        num_fig (int): (Optional) Figure number in which the filter will be plotted.
+        M (int or iterable): Matrix size (rows or rows,cols).
+                             If M is an int, then N = M;
+                             Else, the iterable is assumed as (M,N).
     
     # Returns
-        A rescaled numpy array from 0 to 1 with the filter
+        A rescaled numpy array from 0 to 1 with the filter.
     """
     
     if isinstance(M, (tuple, list)):
@@ -252,14 +255,15 @@ def point_src(M, z, x0, y0, wavelength, dx, dy=None):
     
     # Arguments    
         M (int or iterable): Matrix size (rows or rows,cols).
-                             If M is int then N=M.
+                             If M is an int, then N = M;
+                             Else, the iterable is assumed as (M,N).
         z (float): Screen distance.
-        x0 (float): X center coordinate
-        y0 (float): Y center coordinate
-        wavelength (float): Wavelength
-        dx (float): Sampling pitch in X
+        x0 (float): X center coordinate.
+        y0 (float): Y center coordinate.
+        wavelength (float): Wavelength.
+        dx (float): Sampling pitch in X.
         dy (float): (Optional) Sampling pitch in Y.
-                    If none is given, then dy=dx.
+                    If none is given, then dy = dx.
     
     # Returns
         A numpy array representing the observed field.
@@ -293,12 +297,12 @@ def bluestein3(field,z, wavelength, dx_in, dx_out):
         field (np.ndarray): Input complex field.
         z (float): Propagation distance.
         wavelength (float): Wavelength.
-        dx_in (float or iterable): Input pixel pitch. If its an iterable,
-                                   X and Y values will be taken.
-                                   Else, Y pixel pitch will be dx_in.
+        dx_in (float or iterable): Input pixel pitch.
+                                   If dx_in is a float, then dy_in = dx_in;
+                                   Else, the iterable is assumed as (dx_in, dy_in).
         dx_out (float or iterable): Output pixel pitch.
-                                    X and Y values will be taken.
-                                    Else, Y pixel pitch will be dx_out.
+                                   If dx_out is a float, then dy_out = dx_out;
+                                   Else, the iterable is assumed as (dx_out, dy_out).
     
     # Returns
         A numpy array representing the diffracted field.
@@ -348,6 +352,17 @@ def holo_interpF(mtx_in, wavelength, z, deltax):
     transformation after the fresnel-bluestein transform. The algorithm is
     somehow similar to the nearest neighbor interpolator.
         out = holo_interpF(mtx_in, wavelength, z, deltax)
+        
+    # Arguments
+        mtx_in (np.ndarray): Input complex field.
+        z (float): Propagation distance.
+        wavelength (float): Wavelength.
+        deltax (float or iterable): Object plane pixel pitch.
+                                    If deltax is a float, then deltay = deltax;
+                                    Else, the iterable is assumed as (deltax, deltay).
+        
+    # Returns
+        A numpy array representing the interpolated hologram.
     """
     ## Necessary parameters
     n_rows, n_cols = mtx_in.shape
@@ -415,19 +430,19 @@ def dlhm_sim(object,z,L,wavelength,dx,*args, output_mask=0xF):
     """Function to simulate inline holograms.
     This function simulates DLHM holograms using the methodology presented
     in doi:10.1364/AO.50.001745, it receives the geometrical parameters as
-    inputs. Equal dimensions along the x- and y-axis is assumed.
+    inputs.
     
         hologram, reference, contrast, NA = dlhm_sim(object, wavelength, z, L, dx)
     
     # Arguments
-      object (numpy.ndarray): Object to use as a sample, can be complex
-      z (float): Source to sample distance
-      L (float): Source to camera distance
-      wavelength (float): Wavelength
-      dx (float): Hologram plane pixel pitch on X
-      dy (float): (Optional) Hologram plane pixel pitch on Y
+      object (numpy.ndarray): Object to use as a sample, can be complex.
+      z (float): Source to sample distance.
+      L (float): Source to camera distance.
+      wavelength (float): Wavelength.
+      dx (float): Hologram plane pixel pitch on X.
+      dy (float): (Optional) Hologram plane pixel pitch on Y.
                   If None is given, then dy=dx.
-      output_mask (int): (Optional) A binary mask indicating which output should return:
+      output_mask (int): (Optional) A binary mask indicating which output should dlhm_sim return:
                          1 for the hologram, 2 for the reference wave,
                          4 for the contrast and 8 for the numerical aperture.
                          Default: 15 (return all).
@@ -495,9 +510,24 @@ def dlhm_sim(object,z,L,wavelength,dx,*args, output_mask=0xF):
     # contrast = c_holo
     return outs
 
-## TODO:FBRec with dx & dy
+
 ## TODO: Unify XX_reconstruct params
 def fb_reconstruct(holoC, z, L, x, wavelength):
+    """Function to reconstruct an in-line hologram with the methodology from the
+    Jürgen Kreuzer's patent (US6411406B1), via the Fresnel-Bluestein transform.
+    
+    # Arguments
+        holoC (numpy.ndarray): The contrast hologram.
+        z (float): Source to sample distance.
+        L (float): Source to camera distance.
+        x (float or iterable): Camera sensor side's length.
+                               If x is a float, then height = width;
+                               Else, the iterable is assumed as (width, height).
+        wavelength (float): Wavelength.
+    
+    # Returns
+        A numpy array representing the reconstructed hologram.
+    """
     if isinstance(x, (tuple, list)):
         zL = z / L
     
@@ -513,6 +543,20 @@ def fb_reconstruct(holoC, z, L, x, wavelength):
 
 
 def fb_reconstruct2(holoC, z, L, dx, wavelength):
+    """Function to reconstruct an in-line hologram with the methodology from the
+    Jürgen Kreuzer's patent (US6411406B1), via the Fresnel-Bluestein transform.
+    
+    # Arguments
+        holoC (numpy.ndarray): The contrast hologram.
+        z (float): Source to sample distance.
+        L (float): Source to camera distance.
+        dx (float or iterable): Hologram plane pixel pitch (real pixel size).
+                                If dx is a float, then dy = dx;
+                                Else, the iterable is assumed as (dx,dy).
+        wavelength (float): Wavelength.
+    # Returns
+        A numpy array representing the reconstructed hologram.
+    """
     zL = z / L
 
     ## Pixel size at sample plane
@@ -521,16 +565,42 @@ def fb_reconstruct2(holoC, z, L, dx, wavelength):
     return kreuzer3F(holoC, z, L, wavelength, dx, dxo, filtcosF(100, holoC.shape[0]))
 
 
-# Angular spectrum reconstruction
-def as_reconstruct(holo, ref, dp, lo, z):
-    k = (2 * pi) / lo
+def as_reconstruct(holo, ref, dx, wavelength, z):
+    """Function to reconstruct a hologram via the Angular Spectrum method.
+    
+    # Arguments
+        holo (numpy.ndarray): The recorded hologram.
+        ref (numpy.ndarray): The reference wave.
+        dx (float or iterable): Hologram plane pixel pitch (real pixel size).
+                                If dx is a float, then dy = dx;
+                                Else, the iterable is assumed as (dx,dy).
+        wavelength (float): Wavelength.
+        z (float): The reconstruction distance.
+        
+    # Returns
+        A numpy array representing the reconstructed hologram.
+    """
+    k = (2 * pi) / wavelength
     holo = np.abs(holo)
     ref = np.abs(ref)
     
-    return angular_spectrum(holo - ref, k, dp, z)
+    return angular_spectrum(holo - ref, k, dx, z)
 
 
 def angular_spectrum(u0, k, dx, z):
+    """Function to propagate a wavefield via the Angular Spectrum method.
+    
+    # Arguments
+        u0 (numpy.ndarray): The wavefield to propagate.
+        k (float): The propagation number (2*pi/lambda).
+        dx (float or iterable): Hologram plane pixel pitch (real pixel size).
+                                If dx is a float, then dy = dx;
+                                Else, the iterable is assumed as (dx,dy).
+        z (float): The reconstruction distance.
+        
+    # Returns
+        A numpy array representing the propagated wavefield.
+    """
     if isinstance(dx,(tuple, list)):
         dy = dx[1]
         dx = dx[0]
@@ -553,8 +623,26 @@ def angular_spectrum(u0, k, dx, z):
 
 
 def fft2(x):
+    """Function to obtain the 2D Discrete Fourier Transform via the FFT.
+    It includes two fftshifts: one before and one after applying the original FFT2 algorithm to x.
+    
+    # Arguments
+        x (numpy.ndarray): The input array.
+    
+    # Returns
+        A numpy array with the result after applying the fftshifts and the 2D FFT.
+    """
     return fftshift(_fft2(fftshift(x)))
 
 
 def ifft2(x):
+    """Function to obtain the 2D Inverse Discrete Fourier Transform via the IFFT.
+    It includes two ifftshifts: one before and one after applying the original IFFT2 algorithm to x.
+    
+    # Arguments
+        x (numpy.ndarray): The input array.
+    
+    # Returns
+        A numpy array with the result after applying the ifftshifts and the 2D IFFT.
+    """
     return ifftshift(_ifft2(ifftshift(x)))
